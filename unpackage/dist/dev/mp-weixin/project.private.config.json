@@ -1,0 +1,24 @@
+{
+  "description": "项目私有配置文件。此文件中的内容将覆盖 project.config.json 中的相同字段。项目的改动优先同步到此文件中。详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
+  "projectname": "uview-template%20%E9%9B%86%E6%88%90uview-ui%20%E7%9A%84%E5%9F%BA%E7%A1%80%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E6%A1%86%E6%9E%B6",
+  "setting": {
+    "compileHotReLoad": true,
+    "autoAudits": false,
+    "urlCheck": false,
+    "coverView": false,
+    "lazyloadPlaceholderEnable": false,
+    "skylineRenderEnable": false,
+    "preloadBackgroundData": false,
+    "useApiHook": true,
+    "useApiHostProcess": true,
+    "showShadowRootInWxmlPanel": false,
+    "useStaticServer": false,
+    "useLanDebug": false,
+    "showES6CompileOption": false,
+    "checkInvalidKey": true,
+    "ignoreDevUnusedFiles": true,
+    "bigPackageSizeSupport": true
+  },
+  "condition": {},
+  "libVersion": "3.8.11"
+}

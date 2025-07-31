@@ -1,0 +1,55 @@
+{
+  "pages": [
+    "pages/tabbar/index/index",
+    "pages/tabbar/user/user",
+    "pages/tabbar/create/create"
+  ],
+  "subPackages": [
+    {
+      "root": "subpkg_create",
+      "pages": [
+        "pages/person/person",
+        "pages/enterprise/enterprise"
+      ]
+    },
+    {
+      "root": "subpkg_login",
+      "pages": [
+        "pages/login/login"
+      ]
+    }
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#5570F1",
+    "borderStyle": "white",
+    "backgroundColor": "#fff",
+    "list": [
+      {
+        "pagePath": "pages/tabbar/index/index",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/tabbar/create/create",
+        "iconPath": "/static/tabbar/create.png",
+        "selectedIconPath": "static/tabbar/create-active.png",
+        "text": "创建"
+      },
+      {
+        "pagePath": "pages/tabbar/user/user",
+        "iconPath": "static/tabbar/user.png",
+        "selectedIconPath": "static/tabbar/user-active.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "usingComponents": {}
+}
