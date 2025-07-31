@@ -1,7 +1,7 @@
 <template>
     <view class="add-person-form">
         <view class="form-container">
-            <u-form :model="formData" ref="uForm" label-position="top">
+            <u-form :model="formData"  ref="uForm" label-position="top">
                 <!-- 个人名称 -->
                 <u-form-item label="个人名称" prop="name" :label-style="{ padding: '8rpx' }">
                     <u-input v-model="formData.name" placeholder="请输入个人名称(必填)" :custom-style="{ padding: '8rpx' }" />
@@ -57,7 +57,7 @@
                     </view>
                 </u-form-item>
                 <!-- 附件要求 -->
-                <u-form-item :label="`附件要求 (剩余: ${attachmentRemain})`" prop="attachmentRequired" border-bottom="false"
+                <u-form-item :label="`附件要求 (剩余: ${attachmentRemain})`" prop="attachmentRequired" :border-bottom="false"
                     :label-style="{ backgroundColor: '#f6f7fb', padding: '8rpx' }">
                     <view class="form-item-input">
                         <text class="switch-label">要求上传附件</text>
