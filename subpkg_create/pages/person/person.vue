@@ -45,17 +45,19 @@
                 <!-- 签署阅读设置 -->
                 <u-form-item label="签署阅读设置" prop="readAllDoc"
                     :label-style="{ backgroundColor: '#f6f7fb', padding: '8rpx' }">
-                    <view class="form-item-input">
-                        <text class="switch-label">所有文档需阅读至末页才可提交签署</text>
-                        <u-switch v-model="formData.readAllDoc" activeColor="#2979ff" />
-                    </view>
-                    <view class="form-item-input">
-                        <text class="switch-label">阅读固定时长才可提交签署</text>
-                        <u-switch v-model="formData.readTimeLimit" activeColor="#2979ff" />
+                    <view class="form-item-flex">
+                        <view class="form-item-input">
+                            <text class="switch-label">所有文档需阅读至末页才可提交签署</text>
+                            <u-switch v-model="formData.readAllDoc" activeColor="#2979ff" />
+                        </view>
+                        <view class="form-item-input">
+                            <text class="switch-label">阅读固定时长才可提交签署</text>
+                            <u-switch v-model="formData.readTimeLimit" activeColor="#2979ff" />
+                        </view>
                     </view>
                 </u-form-item>
                 <!-- 附件要求 -->
-                <u-form-item :label="`附件要求 (剩余: ${attachmentRemain})`" prop="attachmentRequired"
+                <u-form-item :label="`附件要求 (剩余: ${attachmentRemain})`" prop="attachmentRequired" border-bottom="false"
                     :label-style="{ backgroundColor: '#f6f7fb', padding: '8rpx' }">
                     <view class="form-item-input">
                         <text class="switch-label">要求上传附件</text>
@@ -157,11 +159,20 @@ export default {
 
 <style lang="scss" scoped>
 .add-person-form {
-  padding: 22rpx 32rpx;
   min-height: 100vh;
   background-color: #fff;
 }
-
+.form-container{
+    height: calc(100vh - 100rpx);
+    overflow-y: auto;
+    padding: 22rpx 32rpx 100rpx;
+}
+.form-item-flex{
+        display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 100%;
+}
 .form-item-input {
   flex: 1;
   display: flex;
