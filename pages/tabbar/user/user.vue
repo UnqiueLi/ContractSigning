@@ -102,7 +102,7 @@
 				}
 
 				uni.navigateTo({
-					url: '/subpkg_user/pages/authentication/authentication'
+					url: '/subpkg_index/pages/authentication/index'
 				});
 			},
 

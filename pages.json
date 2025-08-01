@@ -29,7 +29,14 @@
   "subPackages": [
     {
       "root": "subpkg_index",
-      "pages": []
+      "pages": [
+		  {
+			"path" : "pages/authentication/index",
+			"style" :{
+				"navigationBarTitleText" : "实名认证"
+			}
+		}
+	  ]
     },
 	{
 	  "root": "subpkg_create",

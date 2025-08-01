@@ -103,20 +103,20 @@ const authApi = {
  * 用户信息相关API
  */
 const userApi = {
-	bannerList: () => safeRequestGet('/mini/banner/list'), //轮播图列表
-	getMucaoList: () => safeRequestGet('/mini/pastureType/getList'), //牧草品类列表
-	getMucaoInfo: (id) => safeRequestGet('/mini/pastureType/getInfo/' + id), //牧草品类详细信息
-	uploadPic: (data) => safeRequest('/mini/pasture/uploadPic', data), //上传图片
-	uploadVideo: (data) => safeRequest('/mini/pasture/uploadVideo', data), //上传视频
-	userList: (id) => safeRequestGet('/mini/pasture/list/' + id), //牧草信息列表
-	add: (data) => safeRequest('/mini/pasture/add', data), //新增牧草信息
-	edit: (data) => safeRequest('/mini/pasture/edit', data), //修改牧草信息
-	pastureList: (id) => safeRequestGet('/mini/pasture/' + id), //牧草信息列表
-	edit: (data) => safeRequest('/mini/pasture/edit', data), //修改牧草信息
-	userListCg: (id) => safeRequestGet('/mini/userList'),//牧户列表
-	addUser: (data) => safeRequest('/mini/addUser',data),//新增牧户
+	register: (data) => safeRequest('/mini/register',data), //轮播图列表
+	contractCount: () => safeRequestGet('/mini/getContractCount'), //首页统计
+	// getMucaoInfo: (id) => safeRequestGet('/mini/pastureType/getInfo/' + id), //牧草品类详细信息
+	// uploadPic: (data) => safeRequest('/mini/pasture/uploadPic', data), //上传图片
+	// uploadVideo: (data) => safeRequest('/mini/pasture/uploadVideo', data), //上传视频
+	// userList: (id) => safeRequestGet('/mini/pasture/list/' + id), //牧草信息列表
+	// add: (data) => safeRequest('/mini/pasture/add', data), //新增牧草信息
+	// edit: (data) => safeRequest('/mini/pasture/edit', data), //修改牧草信息
+	// pastureList: (id) => safeRequestGet('/mini/pasture/' + id), //牧草信息列表
+	// edit: (data) => safeRequest('/mini/pasture/edit', data), //修改牧草信息
+	// userListCg: (id) => safeRequestGet('/mini/userList'),//牧户列表
+	// addUser: (data) => safeRequest('/mini/addUser',data),//新增牧户
 	
-	getUserInfo: (id) => safeRequestGet('/mini/getUserInfo/' + id), //牧草信息列表
+	// getUserInfo: (id) => safeRequestGet('/mini/getUserInfo/' + id), //牧草信息列表
 	
 	
 	

@@ -145,6 +145,7 @@
 			this.getContractList()
 			// 获取固定导航的高度
 			this.getFixedNavHeight()
+			this.getContractCount()
 		},
 		onPageScroll(e) {
 			// 监听页面滚动
@@ -233,10 +234,11 @@
 				})
 			},
 
-			// 接口请求示例
-			getList() {
-				// 轮播图接口
-				userApi.bannerList().then(res => {
+			// 统计接口
+			getContractCount() {
+				userApi.contractCount().then(res => {
+					this.statsData.created=res.data.count
+					this.statsData.completed=res.data.finishNumber
 					console.log(res)
 				})
 			}
