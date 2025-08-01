@@ -3,5 +3,12 @@
   "enablePullDownRefresh": false,
   "navigationBarBackgroundColor": "#D4E2F8",
   "navigationBarTextStyle": "black",
-  "usingComponents": {}
+  "usingComponents": {
+    "u-form": "/uview-ui/components/u-form/u-form",
+    "u-form-item": "/uview-ui/components/u-form-item/u-form-item",
+    "u-input": "/uview-ui/components/u-input/u-input",
+    "u-switch": "/uview-ui/components/u-switch/u-switch",
+    "u-select": "/uview-ui/components/u-select/u-select",
+    "u-button": "/uview-ui/components/u-button/u-button"
+  }
 }

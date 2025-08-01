@@ -98,10 +98,56 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "recyclableRender", function() { return recyclableRender; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components
+try {
+  components = {
+    uForm: function () {
+      return __webpack_require__.e(/*! import() | uview-ui/components/u-form/u-form */ "uview-ui/components/u-form/u-form").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-form/u-form.vue */ 183))
+    },
+    uFormItem: function () {
+      return Promise.all(/*! import() | uview-ui/components/u-form-item/u-form-item */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uview-ui/components/u-form-item/u-form-item")]).then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-form-item/u-form-item.vue */ 190))
+    },
+    uInput: function () {
+      return Promise.all(/*! import() | uview-ui/components/u-input/u-input */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uview-ui/components/u-input/u-input")]).then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-input/u-input.vue */ 137))
+    },
+    uSwitch: function () {
+      return __webpack_require__.e(/*! import() | uview-ui/components/u-switch/u-switch */ "uview-ui/components/u-switch/u-switch").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-switch/u-switch.vue */ 200))
+    },
+    uSelect: function () {
+      return __webpack_require__.e(/*! import() | uview-ui/components/u-select/u-select */ "uview-ui/components/u-select/u-select").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-select/u-select.vue */ 250))
+    },
+    uButton: function () {
+      return __webpack_require__.e(/*! import() | uview-ui/components/u-button/u-button */ "uview-ui/components/u-button/u-button").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-button/u-button.vue */ 166))
+    },
+  }
+} catch (e) {
+  if (
+    e.message.indexOf("Cannot find module") !== -1 &&
+    e.message.indexOf(".vue") !== -1
+  ) {
+    console.error(e.message)
+    console.error("1. 排查组件名称拼写是否正确")
+    console.error(
+      "2. 排查组件是否符合 easycom 规范，文档：https://uniapp.dcloud.net.cn/collocation/pages?id=easycom"
+    )
+    console.error(
+      "3. 若组件不符合 easycom 规范，需手动引入，并在 components 中注册该组件"
+    )
+  } else {
+    throw e
+  }
+}
 var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  if (!_vm._isMounted) {
+    _vm.e0 = function ($event) {
+      _vm.showVerifyTypePicker = true
+    }
+    _vm.e1 = function ($event) {
+      _vm.showVerifyTypePicker = false
+    }
+  }
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -135,7 +181,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function(uni) {
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -149,13 +195,159 @@ exports.default = void 0;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default = {
   data: function data() {
-    return {};
+    return {
+      formData: {
+        name: '',
+        contact: '',
+        realName: '',
+        creditCode: '',
+        requireSignature: false,
+        verifyType: '签署密码、短信验证、人脸识别',
+        readAllDoc: false,
+        readTimeLimit: false,
+        attachmentRequired: false
+      },
+      verifyTypeList: [{
+        label: '签署密码、短信验证、人脸识别',
+        value: '签署密码、短信验证、人脸识别'
+      }, {
+        label: '仅签署密码',
+        value: '仅签署密码'
+      }, {
+        label: '仅短信验证',
+        value: '仅短信验证'
+      }, {
+        label: '仅人脸识别',
+        value: '仅人脸识别'
+      }],
+      showVerifyTypePicker: false,
+      showVerifyTypeSelect: false,
+      attachmentRemain: 9
+    };
   },
-  methods: {}
+  methods: {
+    onCancel: function onCancel() {
+      uni.navigateBack();
+    },
+    onSubmit: function onSubmit() {
+      this.$refs.uForm.validate(function (valid) {
+        if (valid) {
+          uni.showToast({
+            title: '保存成功',
+            icon: 'success'
+          });
+          setTimeout(function () {
+            uni.navigateBack();
+          }, 1500);
+        }
+      });
+    },
+    onVerifyTypeConfirm: function onVerifyTypeConfirm(e) {
+      this.formData.verifyType = e[0].label;
+      this.showVerifyTypePicker = false;
+    }
+  }
 };
 exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
 
