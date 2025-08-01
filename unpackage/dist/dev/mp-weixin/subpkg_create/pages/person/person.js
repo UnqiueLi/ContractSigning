@@ -88,14 +88,14 @@ try {
     uInput: function () {
       return Promise.all(/*! import() | uview-ui/components/u-input/u-input */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uview-ui/components/u-input/u-input")]).then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-input/u-input.vue */ 137))
     },
+    uSelect: function () {
+      return __webpack_require__.e(/*! import() | uview-ui/components/u-select/u-select */ "uview-ui/components/u-select/u-select").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-select/u-select.vue */ 250))
+    },
     uSwitch: function () {
       return __webpack_require__.e(/*! import() | uview-ui/components/u-switch/u-switch */ "uview-ui/components/u-switch/u-switch").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-switch/u-switch.vue */ 200))
     },
     uButton: function () {
       return __webpack_require__.e(/*! import() | uview-ui/components/u-button/u-button */ "uview-ui/components/u-button/u-button").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-button/u-button.vue */ 166))
-    },
-    uPicker: function () {
-      return Promise.all(/*! import() | uview-ui/components/u-picker/u-picker */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uview-ui/components/u-picker/u-picker")]).then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-picker/u-picker.vue */ 173))
     },
   }
 } catch (e) {
@@ -124,16 +124,16 @@ var render = function () {
       _vm.showIdTypePicker = true
     }
     _vm.e1 = function ($event) {
-      _vm.showSignTypePicker = true
-    }
-    _vm.e2 = function ($event) {
-      _vm.showVerifyTypePicker = true
-    }
-    _vm.e3 = function ($event) {
       _vm.showIdTypePicker = false
     }
-    _vm.e4 = function ($event) {
+    _vm.e2 = function ($event) {
+      _vm.showSignTypePicker = true
+    }
+    _vm.e3 = function ($event) {
       _vm.showSignTypePicker = false
+    }
+    _vm.e4 = function ($event) {
+      _vm.showVerifyTypePicker = true
     }
     _vm.e5 = function ($event) {
       _vm.showVerifyTypePicker = false
@@ -263,6 +263,26 @@ exports.default = void 0;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default = {
   data: function data() {
     return {
@@ -278,12 +298,53 @@ var _default = {
         readTimeLimit: false,
         attachmentRequired: false
       },
-      idTypeList: ['中国居民身份证', '护照', '军官证', '港澳通行证', '台湾通行证'],
-      signTypeList: ['不限制签名方式', '手写签名', '电子签名', '印章签名'],
-      verifyTypeList: ['签署密码、短信验证、人脸识别', '仅签署密码', '仅短信验证', '仅人脸识别'],
+      idTypeList: [{
+        label: '中国居民身份证',
+        value: '中国居民身份证'
+      }, {
+        label: '护照',
+        value: '护照'
+      }, {
+        label: '军官证',
+        value: '军官证'
+      }, {
+        label: '港澳通行证',
+        value: '港澳通行证'
+      }, {
+        label: '台湾通行证',
+        value: '台湾通行证'
+      }],
+      signTypeList: [{
+        label: '不限制签名方式',
+        value: '不限制签名方式'
+      }, {
+        label: '手写签名',
+        value: '手写签名'
+      }, {
+        label: '电子签名',
+        value: '电子签名'
+      }, {
+        label: '印章签名',
+        value: '印章签名'
+      }],
+      verifyTypeList: [{
+        label: '签署密码、短信验证、人脸识别',
+        value: '签署密码、短信验证、人脸识别'
+      }, {
+        label: '仅签署密码',
+        value: '仅签署密码'
+      }, {
+        label: '仅短信验证',
+        value: '仅短信验证'
+      }, {
+        label: '仅人脸识别',
+        value: '仅人脸识别'
+      }],
       showIdTypePicker: false,
       showSignTypePicker: false,
       showVerifyTypePicker: false,
+      showSignTypeSelect: false,
+      showVerifyTypeSelect: false,
       attachmentRemain: 9
     };
   },
@@ -305,15 +366,15 @@ var _default = {
       });
     },
     onIdTypeConfirm: function onIdTypeConfirm(e) {
-      this.formData.idType = e.value[0];
+      this.formData.idType = e[0].label;
       this.showIdTypePicker = false;
     },
     onSignTypeConfirm: function onSignTypeConfirm(e) {
-      this.formData.signType = e.value[0];
+      this.formData.signType = e[0].label;
       this.showSignTypePicker = false;
     },
     onVerifyTypeConfirm: function onVerifyTypeConfirm(e) {
-      this.formData.verifyType = e.value[0];
+      this.formData.verifyType = e[0].label;
       this.showVerifyTypePicker = false;
     }
   }

@@ -1,7 +1,7 @@
 <template>
     <view class="add-person-form">
         <view class="form-container">
-            <u-form :model="formData"  ref="uForm" label-position="top">
+            <u-form :model="formData" ref="uForm" label-position="top">
                 <!-- 个人名称 -->
                 <u-form-item label="个人名称" prop="name" :label-style="{ padding: '8rpx' }">
                     <u-input v-model="formData.name" placeholder="请输入个人名称(必填)" :custom-style="{ padding: '8rpx' }" />
@@ -19,8 +19,10 @@
 
                 <!-- 证件类型 -->
                 <u-form-item label="证件类型" prop="idType" :label-style="{ padding: '8rpx' }">
-                    <u-input v-model="formData.idType" placeholder="请选择证件类型" @click="showIdTypePicker = true"
-                        readonly="true" right-icon="arrow-right" :custom-style="{ padding: '8rpx' }" />
+                    <u-input type="select" :select-open="selectShow"  v-model="formData.idType" placeholder="请选择证件类型"
+                        @click="showIdTypePicker = true" :custom-style="{ padding: '8rpx' }" />
+                    <u-select v-model="showIdTypePicker" mode="single-column" :list="idTypeList"
+                        @confirm="onIdTypeConfirm" @cancel="showIdTypePicker = false" />
                 </u-form-item>
 
                 <!-- 证件号 -->
@@ -29,17 +31,41 @@
                 </u-form-item>
 
                 <!-- 签署方式 -->
-                <u-form-item label="签署方式" prop="signType"
-                    :label-style="{ backgroundColor: '#f6f7fb', padding: '8rpx' }">
-                    <u-input v-model="formData.signType" disabled placeholder="请选择签署方式"
-                        @click="showSignTypePicker = true" readonly :custom-style="{ padding: '8rpx' }" />
+                <u-form-item label="签署方式" prop="signType" :label-style="{ backgroundColor: '#f6f7fb', padding: '8rpx' }">
+                    <u-input 
+                        type="select" 
+                        :select-open="showSignTypeSelect" 
+                        v-model="formData.signType" 
+                        placeholder="请选择签署方式"
+                        @click="showSignTypePicker = true" 
+                        :custom-style="{ padding: '8rpx' }" 
+                    />
+                    <u-select 
+                        v-model="showSignTypePicker" 
+                        mode="single-column" 
+                        :list="signTypeList"
+                        @confirm="onSignTypeConfirm" 
+                        @cancel="showSignTypePicker = false" 
+                    />
                 </u-form-item>
 
                 <!-- 意愿验证方式 -->
-                <u-form-item label="意愿验证方式" prop="verifyType"
-                    :label-style="{ backgroundColor: '#f6f7fb', padding: '8rpx' }">
-                    <u-input v-model="formData.verifyType" disabled placeholder="请选择意愿验证方式"
-                        @click="showVerifyTypePicker = true" readonly :custom-style="{ padding: '8rpx' }" />
+                <u-form-item label="意愿验证方式" prop="verifyType" :label-style="{ backgroundColor: '#f6f7fb', padding: '8rpx' }">
+                    <u-input 
+                        type="select" 
+                        :select-open="showVerifyTypeSelect" 
+                        v-model="formData.verifyType" 
+                        placeholder="请选择意愿验证方式"
+                        @click="showVerifyTypePicker = true" 
+                        :custom-style="{ padding: '8rpx' }" 
+                    />
+                    <u-select 
+                        v-model="showVerifyTypePicker" 
+                        mode="single-column" 
+                        :list="verifyTypeList"
+                        @confirm="onVerifyTypeConfirm" 
+                        @cancel="showVerifyTypePicker = false" 
+                    />
                 </u-form-item>
 
                 <!-- 签署阅读设置 -->
@@ -73,13 +99,7 @@
             <u-button type="primary" @click="onSubmit" class="save-btn">保存</u-button>
         </view>
 
-        <!-- 选择器弹窗：证件类型、签署方式和意愿验证方式 -->
-        <u-picker mode="selector" :show="showIdTypePicker" :columns="[idTypeList]" @confirm="onIdTypeConfirm"
-            @cancel="showIdTypePicker = false" />
-        <u-picker mode="selector" :show="showSignTypePicker" :columns="[signTypeList]" @confirm="onSignTypeConfirm"
-            @cancel="showSignTypePicker = false" />
-        <u-picker mode="selector" :show="showVerifyTypePicker" :columns="[verifyTypeList]"
-            @confirm="onVerifyTypeConfirm" @cancel="showVerifyTypePicker = false" />
+
     </view>
 </template>
 
@@ -100,27 +120,30 @@ export default {
         attachmentRequired: false,
       },
       idTypeList: [
-        '中国居民身份证',
-        '护照',
-        '军官证',
-        '港澳通行证',
-        '台湾通行证'
+        { label: '中国居民身份证', value: '中国居民身份证' },
+        { label: '护照', value: '护照' },
+        { label: '军官证', value: '军官证' },
+        { label: '港澳通行证', value: '港澳通行证' },
+        { label: '台湾通行证', value: '台湾通行证' }
       ],
+       
       signTypeList: [
-        '不限制签名方式',
-        '手写签名',
-        '电子签名',
-        '印章签名'
+        { label: '不限制签名方式', value: '不限制签名方式' },
+        { label: '手写签名', value: '手写签名' },
+        { label: '电子签名', value: '电子签名' },
+        { label: '印章签名', value: '印章签名' }
       ],
       verifyTypeList: [
-        '签署密码、短信验证、人脸识别',
-        '仅签署密码',
-        '仅短信验证',
-        '仅人脸识别'
+        { label: '签署密码、短信验证、人脸识别', value: '签署密码、短信验证、人脸识别' },
+        { label: '仅签署密码', value: '仅签署密码' },
+        { label: '仅短信验证', value: '仅短信验证' },
+        { label: '仅人脸识别', value: '仅人脸识别' }
       ],
       showIdTypePicker: false,
       showSignTypePicker: false,
       showVerifyTypePicker: false,
+      showSignTypeSelect: false,
+      showVerifyTypeSelect: false,
       attachmentRemain: 9,
     }
   },
@@ -142,15 +165,15 @@ export default {
       });
     },
     onIdTypeConfirm(e) {
-      this.formData.idType = e.value[0];
+      this.formData.idType = e[0].label;
       this.showIdTypePicker = false;
     },
     onSignTypeConfirm(e) {
-      this.formData.signType = e.value[0];
+      this.formData.signType = e[0].label;
       this.showSignTypePicker = false;
     },
     onVerifyTypeConfirm(e) {
-      this.formData.verifyType = e.value[0];
+      this.formData.verifyType = e[0].label;
       this.showVerifyTypePicker = false;
     }
   }
