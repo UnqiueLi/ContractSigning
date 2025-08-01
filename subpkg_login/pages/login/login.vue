@@ -94,7 +94,7 @@
 								});
 
 								uni.hideLoading();
-								console.log(res.code, "res.coderes.code")
+								console.log(res, "res.coderes.code")
 								if (res.code === 200) {
 									// 保存登录信息
 									// uni.setStorageSync('token', res.data.token);
@@ -106,11 +106,11 @@
 									});
 									this.getDecryptPhone(e)
 									// 登录成功，跳转到首页
-									// setTimeout(() => {
-									// 	uni.switchTab({
-									// 		url: '/pages/tabbar/index/index'
-									// 	});
-									// }, 1500);
+									setTimeout(() => {
+										uni.switchTab({
+											url: '/pages/tabbar/index/index'
+										});
+									}, 1500);
 								} else {
 									uni.showToast({
 										title: res.msg || '登录失败',
@@ -149,6 +149,7 @@
 								}
 								authApi.decryptPhone(parmas).then(res => {
 									this.phoneNumber=res.phone
+									uni.setStorageSync('phoneNumber', res.phone);
 									this.getMyLogin()
 								})
 							}

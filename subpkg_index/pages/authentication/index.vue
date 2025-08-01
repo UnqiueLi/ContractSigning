@@ -7,9 +7,17 @@
 				<u-cell-group>
 					<u-cell-item
 						title="证件类型"
-						value="中国居民身份证"
 						:arrow="false"
-					></u-cell-item>
+					>
+						<u-input
+							slot="right-icon"
+							v-model="idNumberType"
+							:border="false"
+							:clearable="true"
+							class="cell-input"
+							disabled
+						></u-input>
+					</u-cell-item>
 					<u-cell-item
 						title="姓名"
 						:arrow="false"
@@ -92,9 +100,11 @@
 	export default {
 		data() {
 			return {
-				userName: '',
+				idNumberType: '中国居民身份证',
 				idNumber: '',
+				userName:'',
 				agreementChecked: false,
+				phoneNumber:''
 			}
 		},
 		computed: {
@@ -105,11 +115,27 @@
 			}
 		},
 		created() {
-			this.getRegister()
+			thsi.phoneNumber=uni.getStorageSync('phoneNumber');
 		},
 		methods: {
 			getRegister(){
 				userApi.register({type:'1'}).then(res => {
+					this.getCertificate(res.result.data)
+				})
+			},
+			getCertificate(code){
+				const parmas={
+					customerId:code,
+					verifiedWay:'0',
+					pageModify:'1',
+					customerName:this.userName,
+					customerIdentType:'0',
+					customerIdentNo:this.idNumber,
+					mobile:this.phoneNumber,
+					certType:'0'
+				}
+				userApi.certificate(parmas).then(res => {
+					
 				})
 			},
 			onAgreementChange(value) {
@@ -138,8 +164,7 @@
 				uni.showLoading({
 					title: '提交中...'
 				});
-				
-				// 模拟提交
+				this.getRegister()
 				setTimeout(() => {
 					uni.hideLoading();
 					uni.showToast({

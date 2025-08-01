@@ -77,7 +77,6 @@
 		<!-- 最近签署列表 -->
 		<view class="recent-signed">
 			<view class="section-title">最近签署列表</view>
-
 			<view class="contract-list">
 				<view class="contract-item" v-for="(item, index) in contractList" :key="index">
 					<view class="contract-icon">
@@ -88,7 +87,7 @@
 						<view class="contract-tags">
 							<text class="tag" v-for="(tag, idx) in item.tags" :key="idx">{{tag}}</text>
 						</view>
-						<view class="contract-from">发起方: {{item.from}}</view>
+						<view class="contract-from">发起方: {{item.merchantName}}</view>
 					</view>
 					<view class="contract-action">
 						<button class="view-btn" @click="viewContract(item.id)">去查看</button>
@@ -188,45 +187,10 @@
 
 			// 获取合同列表
 			getContractList() {
-				// 这里模拟获取数据，实际项目中应使用真实API
-				// orderApi.getContractList().then(res => {
-				//   this.contractList = res.data
-				// })
-
-				// 模拟数据
-				this.contractList = [{
-						id: '1',
-						title: '租赁服务合同',
-						tags: ['房屋租赁', '设备/物品租赁'],
-						from: '内蒙古某某某科技有限公司'
-					},
-					{
-						id: '2',
-						title: '虚拟资产交易合同',
-						tags: ['资源买卖', '设备/物品租赁'],
-						from: '内蒙古某某某科技有限公司'
-					},
-					{
-						id: '3',
-						title: '租赁服务合同',
-						tags: ['房屋租赁', '设备/物品租赁'],
-						from: '内蒙古某某某科技有限公司'
-					},
-					{
-						id: '4',
-						title: '租赁服务合同',
-						tags: ['房屋租赁', '设备/物品租赁'],
-						from: '内蒙古某某某科技有限公司'
-					},
-					{
-						id: '5',
-						title: '租赁服务合同',
-						tags: ['房屋租赁', '设备/物品租赁'],
-						from: '内蒙古某某某科技有限公司'
-					}
-				]
+				userApi.contractList().then(res => {
+				  this.contractList = res.data
+				})
 			},
-
 			// 查看合同详情
 			viewContract(id) {
 				uni.navigateTo({
