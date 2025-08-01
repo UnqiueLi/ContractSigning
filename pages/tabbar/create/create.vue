@@ -38,22 +38,17 @@
 				<view class="form-card">
 					<view class="upload-item">
 						<view class="upload-title">文档上传</view>
-						<view class="upload-btn">
+						<view class="upload-btn" @click="triggerFile">
 							<view class="custom-upload-btn">添加文档</view>
 						</view>
 					</view>
 				</view>
-				
-				<!-- 附件上传 -->
-				<view class="form-card">
-					<view class="upload-item">
-						<view class="upload-title">附件上传</view>
-						<view class="upload-btn">
-							<view class="custom-upload-btn">添加附件</view>
-						</view>
+				<view class="form-card filesBox" v-if="files.length>0">
+					<view class="fileNameBox" v-for="(item, index) in files" :key="index">
+						<text>{{item.fileName}}</text>
+						<u-icon name="trash" size="22" color="#6c757d"  class="delete-icon" @click="deleteFile(index)"></u-icon>
 					</view>
 				</view>
-				
 				<!-- 参与方 -->
 				<view class="form-card">
 					<view class="participants-header">
@@ -145,6 +140,7 @@
 </template>
 
 <script>
+	import settings from '@/common/settings.js';
 	export default {
 		data() {
 			return {
@@ -155,6 +151,7 @@
 					title: '',
 					deadline: ''
 				},
+				files:[],
 				showPicker: false,
 				timePickerParams: {
 					year: true,
@@ -179,6 +176,101 @@
 			// 页面显示时执行
 		},
 		methods: {
+			// 触发文件选择
+			triggerFile() {
+				// #ifdef MP-WEIXIN
+				uni.chooseMessageFile({
+					count: 5,
+					type: 'file',
+					success: (res) => {
+						console.log('选择文件成功:', res);
+						this.handleFileSelect(res.tempFiles);
+					},
+					fail: (err) => {
+						console.error('选择文件失败:', err);
+						uni.showToast({
+							title: '选择文件失败',
+							icon: 'none'
+						});
+					}
+				});
+				// #endif
+				
+				// #ifndef MP-WEIXIN
+				this.mediatype='all'
+				this.$nextTick(() => {
+					this.fileList = [];
+					setTimeout(() => {
+						this.$refs.filePicker.choose();
+					}, 100);
+				});
+				// #endif
+			},
+			// 处理文件选择
+			handleFileSelect(tempFiles) {
+				tempFiles.forEach((file) => {
+					this.uploadFile(file);
+				});
+			},
+			// 上传文件
+			uploadFile(file) {
+				// 获取基础URL
+				const baseUrl = process.env.NODE_ENV === 'development' ?
+					settings.devUrl : settings.prodUrl;
+				// 获取token
+				const token = uni.getStorageSync('token');
+				
+				uni.showLoading({
+					title: '上传中...'
+				});
+			
+				uni.uploadFile({
+					url: baseUrl + '/common/upload',
+					filePath: file.path,
+					name: 'file',
+					header: {
+						'Authorization': 'Bearer ' + token
+					},
+					success: (uploadFileRes) => {
+						uni.hideLoading();
+						console.log(uploadFileRes.data,"uploadFileResuploadFileRes");
+						let result;
+						try {
+							result = JSON.parse(uploadFileRes.data);
+							if (result.code == 200) {
+								// 将上传成功的文件信息添加到任务表单的files数组
+								this.files.push({
+									fileName: file.name,
+									url: result.fileName,
+									fileType:result.fileType
+								});
+								uni.showToast({
+									title: '上传成功',
+									icon: 'success'
+								});
+							} else { 
+								uni.showToast({
+									title: result.msg || '上传失败',
+									icon: 'none'
+								});
+							}
+						}catch (error) {
+						  console.error('发生错误:', error.message);
+						}
+					},
+					fail: (err) => {
+						uni.hideLoading();
+						console.log('上传失败:', err);
+						uni.showToast({
+							title: '上传失败，请重试',
+							icon: 'none'
+						});
+					}
+				});
+			},
+			deleteFile(index) {
+				this.files.splice(index, 1);
+			},
 			addUser(id){
 				if(id == 1){
 					uni.navigateTo({
@@ -265,7 +357,22 @@
 		margin-bottom: 20rpx;
 		box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
 	}
+	.filesBox{
+		padding: 20rpx 32rpx;
+	}
+	.fileNameBox text {
+		color: #007AFF;
+		font-size: 26rpx;
+		flex: 1;
+	}
 	
+	.fileNameBox .delete-icon {
+		width: 32rpx;
+		height: 32rpx;
+		color: #6c757d;
+		cursor: pointer;
+		margin-left: 20rpx;
+	}
 	.form-item {
 		display: flex;
 		padding: 0 32rpx;
