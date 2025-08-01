@@ -122,7 +122,12 @@ const userApi = {
 	
 };
 
+const addUserApi = {
+    add: (data) => safeRequest('/mini/addMerchant', data), // 登录
+};
+
 export {
 	authApi,
-	userApi
+    userApi,
+    addUserApi
 };
