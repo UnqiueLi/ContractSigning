@@ -123,7 +123,8 @@ const userApi = {
 };
 
 const addUserApi = {
-    add: (data) => safeRequest('/mini/addMerchant', data), // 登录
+    add: (data) => safeRequest('/mini/addMerchant', data), // 新增个人、新增企业
+    list: () => safeRequestGet('/mini/getMerchantList')
 };
 
 export {

@@ -1,64 +1,74 @@
 <template>
-	<view>
-		<view class="page-container">
-			<view class="bg-header"></view>
-			<!-- 顶部标题区域 -->
-			<view class="top-nav">
-				<text class="page-title">创建任务</text>
-			</view>
-			
-			<!-- 表单区域 -->
-			<view class="form-container">
-				<!-- 基本信息 -->
-				<view class="form-card">
-					<view class="form-item">
-						<view class="form-item-label">发起方</view>
-						<view class="form-item-input">
-							<u-input v-model="formData.initiator" placeholder="请输入发起方" />
-						</view>
-					</view>
-					<view class="form-line"></view>
-					<view class="form-item">
-						<view class="form-item-label">主题</view>
-						<view class="form-item-input">
-							<u-input v-model="formData.title" placeholder="请输入主题" />
-						</view>
-					</view>
-					<view class="form-line"></view>
-					<view class="form-item" @click="showTimePicker">
-						<view class="form-item-label">截止时间</view>
-						<view class="form-item-input time-select">
-							<text>{{ formData.deadline || '请选择截止时间' }}</text>
-							<u-icon name="arrow-right" color="#C0C4CC" size="28"></u-icon>
-						</view>
-					</view>
-				</view>
-				
-				<!-- 文档上传 -->
-				<view class="form-card">
-					<view class="upload-item">
-						<view class="upload-title">文档上传</view>
-						<view class="upload-btn" @click="triggerFile">
-							<view class="custom-upload-btn">添加文档</view>
-						</view>
-					</view>
-				</view>
-				<view class="form-card filesBox" v-if="files.length>0">
-					<view class="fileNameBox" v-for="(item, index) in files" :key="index">
-						<text>{{item.fileName}}</text>
-						<u-icon name="trash" size="22" color="#6c757d"  class="delete-icon" @click="deleteFile(index)"></u-icon>
-					</view>
-				</view>
-				<!-- 参与方 -->
-				<view class="form-card">
-					<view class="participants-header">
-						<view class="participants-title">参与方 (3)</view>
-					</view>
-					
-					<view class="participants-list">
-						<view class="participant-item">
+    <view>
+        <view class="page-container">
+            <view class="bg-header"></view>
+            <!-- 顶部标题区域 -->
+            <view class="top-nav">
+                <text class="page-title">创建任务</text>
+            </view>
+
+            <!-- 表单区域 -->
+            <view class="form-container">
+                <!-- 基本信息 -->
+                <view class="form-card">
+                    <view class="form-item">
+                        <view class="form-item-label">发起方</view>
+                        <view class="form-item-input">
+                            <u-input v-model="formData.initiator" placeholder="请输入发起方" />
+                        </view>
+                    </view>
+                    <view class="form-line"></view>
+                    <view class="form-item">
+                        <view class="form-item-label">主题</view>
+                        <view class="form-item-input">
+                            <u-input v-model="formData.title" placeholder="请输入主题" />
+                        </view>
+                    </view>
+                    <view class="form-line"></view>
+                    <view class="form-item" @click="showTimePicker">
+                        <view class="form-item-label">截止时间</view>
+                        <view class="form-item-input time-select">
+                            <text>{{ formData.deadline || '请选择截止时间' }}</text>
+                            <u-icon name="arrow-right" color="#C0C4CC" size="28"></u-icon>
+                        </view>
+                    </view>
+                </view>
+
+                <!-- 文档上传 -->
+                <view class="form-card">
+                    <view class="upload-item">
+                        <view class="upload-title">文档上传</view>
+                        <view class="upload-btn" @click="triggerFile">
+                            <view class="custom-upload-btn">添加文档</view>
+                        </view>
+                    </view>
+                </view>
+                <view class="form-card filesBox" v-if="files.length>0">
+                    <view class="fileNameBox" v-for="(item, index) in files" :key="index">
+                        <text>{{item.fileName}}</text>
+                        <u-icon name="trash" size="22" color="#6c757d" class="delete-icon"
+                            @click="deleteFile(index)"></u-icon>
+                    </view>
+                </view>
+                <!-- 参与方 -->
+                <view class="form-card">
+                    <view class="participants-header">
+                        <view class="participants-title">参与方 (3)</view>
+                    </view>
+
+                    <view class="participants-list">
+                        <view class="participant-item" v-for="n in listData">
+                            <template v-if="n.name">
+                                <u-avatar src="/static/image/userInfo.png" size="35"></u-avatar>
+                                <text class="participant-name">{{ n.name }}</text>
+                                <view class="participant-icon">
+                                    <u-icon name="trash" size="40" style="color: #fab6b6;"></u-icon>
+                                </view>
+                            </template>
+                        </view>
+                        <!-- <view class="participant-item">
 							<u-avatar src="/static/image/userInfo.png" size="35"></u-avatar>
-							<text class="participant-name">发起方 蓝胖子</text>
+							<text class="participant-name">蓝胖子</text>
 							<view class="participant-icon">
 								<u-icon name="trash" size="40" style="color: #fab6b6;"></u-icon>
 							</view>
@@ -69,24 +79,17 @@
 							<view class="participant-icon">
 								<u-icon name="trash" size="40" style="color: #fab6b6;"></u-icon>
 							</view>
-						</view>
-						<view class="participant-item">
-							<u-avatar src="/static/image/userInfo.png" size="35"></u-avatar>
-							<text class="participant-name">蓝胖子</text>
-							<view class="participant-icon">
-								<u-icon name="trash" size="40" style="color: #fab6b6;"></u-icon>
-							</view>
-						</view>
-					</view>
-					
-					<view class="btn-group">
-						<view class="custom-btn" @click="addUser(1)">添加个人</view>
-						<view class="custom-btn" @click="addUser(2)">添加企业</view>
-					</view>
-				</view>
-				
-				<!-- 抄送 -->
-				<!-- <view class="form-card">
+						</view> -->
+                    </view>
+
+                    <view class="btn-group">
+                        <view class="custom-btn" @click="addUser(1)">添加个人</view>
+                        <view class="custom-btn" @click="addUser(2)">添加企业</view>
+                    </view>
+                </view>
+
+                <!-- 抄送 -->
+                <!-- <view class="form-card">
 					<view class="copy-section">
 						<view class="copy-title">抄送</view>
 						<view class="copy-links">
@@ -95,52 +98,47 @@
 						</view>
 					</view>
 				</view> -->
-				
-				<!-- 签署设置 -->
-				<view class="form-card">
-					<!-- <view class="sign-item">
+
+                <!-- 签署设置 -->
+                <view class="form-card">
+                    <!-- <view class="sign-item">
 						<text class="sign-text">要求签署的必须证书机构为CFCA</text>
 						<u-switch v-model="requireCFCA"></u-switch>
 					</view> -->
-					
-					<view class="sign-method">
-						<text class="sign-text">签署方式</text>
-						<u-radio-group v-model="signMethod">
-							<view class="sign-options">
-								<view class="sign-option">
-									<u-radio name="manual" :checked="signMethod === 'manual'"></u-radio>
-									<text class="sign-option-text">手动签署</text>
-								</view>
-								<view class="sign-option">
-									<u-radio name="auto" :checked="signMethod === 'auto'"></u-radio>
-									<text class="sign-option-text">自动签署</text>
-								</view>
-							</view>
-						</u-radio-group>
-					</view>
-				</view>
-				
-				<!-- 底部按钮 -->
-				<view class="bottom-actions">
-					<u-button type="primary" class="submit-btn">提交任务</u-button>
-				</view>
-			</view>
-		</view>
-		
-		<!-- 时间选择器 -->
-		<u-picker
-			v-model="showPicker"
-			mode="time"
-			:params="timePickerParams"
-			:show-time-tag="true"
-			@confirm="onTimeConfirm"
-			@cancel="showPicker = false"
-		></u-picker>
-	</view>
+
+                    <view class="sign-method">
+                        <text class="sign-text">签署方式</text>
+                        <u-radio-group v-model="signMethod">
+                            <view class="sign-options">
+                                <view class="sign-option">
+                                    <u-radio name="manual" :checked="signMethod === 'manual'"></u-radio>
+                                    <text class="sign-option-text">手动签署</text>
+                                </view>
+                                <view class="sign-option">
+                                    <u-radio name="auto" :checked="signMethod === 'auto'"></u-radio>
+                                    <text class="sign-option-text">自动签署</text>
+                                </view>
+                            </view>
+                        </u-radio-group>
+                    </view>
+                </view>
+
+                <!-- 底部按钮 -->
+                <view class="bottom-actions">
+                    <u-button type="primary" class="submit-btn">提交任务</u-button>
+                </view>
+            </view>
+        </view>
+
+        <!-- 时间选择器 -->
+        <u-picker v-model="showPicker" mode="time" :params="timePickerParams" :show-time-tag="true"
+            @confirm="onTimeConfirm" @cancel="showPicker = false"></u-picker>
+    </view>
 </template>
 
 <script>
 	import settings from '@/common/settings.js';
+import { addUserApi } from '../../../api/user';
 	export default {
 		data() {
 			return {
@@ -166,16 +164,28 @@
 					border: '1rpx solid #406DFF',
 					color: '#406DFF',
 					backgroundColor: '#fff'
-				}
+                },
+                listData:[]
 			};
 		},
 		onLoad() {
-			
+      
 		},
 		onShow() {
-			// 页面显示时执行
+            // 页面显示时执行
+            this.getList()
 		},
-		methods: {
+    methods: {
+        // 参与方列表
+
+         async  getList() {
+            const res = await addUserApi.list({})
+            if (res.code === 200) {
+                console.log(res)
+                this.listData=res?.data
+            }
+         },
+        
 			// 触发文件选择
 			triggerFile() {
 				// #ifdef MP-WEIXIN

@@ -120,7 +120,6 @@ export default {
        
       ],
        
-   
       showIdTypePicker: false,
    
     }
