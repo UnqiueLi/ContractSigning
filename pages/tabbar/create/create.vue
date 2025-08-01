@@ -169,8 +169,15 @@ import { addUserApi } from '../../../api/user';
 			};
 		},
 		onLoad() {
-      
+            // 监听刷新事件
+            uni.$on('refreshUserList', () => {
+                this.getList();
+            }); 
 		},
+    onUnload() {
+        // 页面卸载时移除监听
+        uni.$off('refreshUserList');
+    },
 		onShow() {
             // 页面显示时执行
             this.getList()

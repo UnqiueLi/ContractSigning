@@ -63,7 +63,8 @@ export default {
                             title: '保存成功',
                             icon: 'success'
                         });
-
+                        // 发送刷新事件
+                        uni.$emit('refreshUserList');
                         setTimeout(() => {
                             uni.navigateBack();
                         }, 1500);
