@@ -131,25 +131,30 @@
 			getCertificate(code){
 				const parmas={
 					customerId:code,
-					verifiedWay:'0',
+					verifiedWay:'4',
 					pageModify:'1',
 					customerName:this.userName,
 					customerIdentType:'0',
 					customerIdentNo:this.idNumber,
 					mobile:this.phoneNumber,
-					certType:'0'
+					certType:'0',
+					isMiniProgram:'0',
 				}
 				userApi.certificate(parmas).then(res => {
 					if(res.code===1){
 						 console.log( Base64.decode(res.data.url),"sssss66644")
-						userApi.bindRealName({customerId:code,verifiedSerialNo:res.data.transactionNo}).then(res => {
-							if(res.code===3205){
-								this.content=res.msg
-							}else if(res.code===1){
-								this.content="恭喜您实名认证成功"
-							}
-							this.showModal=true
-						})
+						 const baseUrl=Base64.decode(res.data.url)
+						 uni.navigateTo({
+						   url: '/subpkg_index/pages/webview/index?url=' + encodeURIComponent(baseUrl)
+						 });
+						// userApi.bindRealName({customerId:code,verifiedSerialNo:res.data.transactionNo}).then(res => {
+						// 	if(res.code===3205){
+						// 		this.content=res.msg
+						// 	}else if(res.code===1){
+						// 		this.content="恭喜您实名认证成功"
+						// 	}
+						// 	this.showModal=true
+						// })
 					}
 				})
 			},

@@ -35,6 +35,13 @@
 			"style" :{
 				"navigationBarTitleText" : "实名认证"
 			}
+		},
+		{
+			"path" : "pages/webview/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : "实名认证"
+			}
 		}
 	  ]
     },
@@ -68,6 +75,15 @@
           "path": "pages/login/login",
           "style": {
             "navigationBarTitleText": "",
+            "enablePullDownRefresh": false,
+            "navigationBarBackgroundColor": "#D4E2F8",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "pages/forgot-password/forgot-password",
+          "style": {
+            "navigationBarTitleText": "忘记密码",
             "enablePullDownRefresh": false,
             "navigationBarBackgroundColor": "#D4E2F8",
             "navigationBarTextStyle": "black"

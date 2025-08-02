@@ -19,6 +19,11 @@
 			<text class="agreement-text">和</text>
 			<text class="agreement-link" @click="openProtocol('privacyPolicy')">《隐私协议》</text>
 		</view>
+
+		<!-- 忘记密码链接 -->
+		<view class="forgot-password-box">
+			<text class="forgot-password-link" @click="goToForgotPassword">忘记密码？</text>
+		</view>
 	</view>
 </template>
 
@@ -56,6 +61,13 @@
 						url: url
 					});
 				}
+			},
+
+			// 跳转到忘记密码页面
+			goToForgotPassword() {
+				uni.navigateTo({
+					url: '/subpkg_login/pages/forgot-password/forgot-password'
+				});
 			},
 
 			// 获取手机号
@@ -340,6 +352,16 @@
 
 	.agreement-link {
 		font-size: 24rpx;
+		color: #4a79f3;
+	}
+
+	.forgot-password-box {
+		text-align: center;
+		margin-top: 20rpx;
+	}
+
+	.forgot-password-link {
+		font-size: 26rpx;
 		color: #4a79f3;
 	}
 </style>
