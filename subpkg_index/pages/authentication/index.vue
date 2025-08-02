@@ -71,7 +71,7 @@
 					<text class="agreement-link" @click="viewAgreement('sign')">《电子签服务协议》</text>
 				</view>
 			</view>
-			
+			<u-modal v-model="showModal" :content="content" @confirm="confirm"></u-modal>
 			<!-- 提交按钮 -->
 			<view class="submit-section">
 				<u-button
@@ -97,6 +97,7 @@
 	import {
 		userApi
 	} from '../../../api/user.js';
+	import { Base64 } from 'js-base64'
 	export default {
 		data() {
 			return {
@@ -104,7 +105,10 @@
 				idNumber: '',
 				userName:'',
 				agreementChecked: false,
-				phoneNumber:''
+				phoneNumber:'',
+				showModal:false,
+				content:'',
+				
 			}
 		},
 		computed: {
@@ -115,12 +119,13 @@
 			}
 		},
 		created() {
-			thsi.phoneNumber=uni.getStorageSync('phoneNumber');
+			this.phoneNumber=uni.getStorageSync('phoneNumber');
 		},
 		methods: {
 			getRegister(){
 				userApi.register({type:'1'}).then(res => {
-					this.getCertificate(res.result.data)
+					uni.setStorageSync('res.data');
+					this.getCertificate(res.data)
 				})
 			},
 			getCertificate(code){
@@ -135,7 +140,17 @@
 					certType:'0'
 				}
 				userApi.certificate(parmas).then(res => {
-					
+					if(res.code===1){
+						 console.log( Base64.decode(res.data.url),"sssss66644")
+						userApi.bindRealName({customerId:code,verifiedSerialNo:res.data.transactionNo}).then(res => {
+							if(res.code===3205){
+								this.content=res.msg
+							}else if(res.code===1){
+								this.content="恭喜您实名认证成功"
+							}
+							this.showModal=true
+						})
+					}
 				})
 			},
 			onAgreementChange(value) {
@@ -161,22 +176,11 @@
 				if (!this.canSubmit) {
 					return;
 				}
-				uni.showLoading({
-					title: '提交中...'
-				});
 				this.getRegister()
-				setTimeout(() => {
-					uni.hideLoading();
-					uni.showToast({
-						title: '提交成功',
-						icon: 'success'
-					});
 					
-					// 延迟返回上一页
-					setTimeout(() => {
-						uni.navigateBack();
-					}, 1500);
-				}, 2000);
+			},
+			confirm(){
+				uni.navigateBack();
 			}
 		},
 		

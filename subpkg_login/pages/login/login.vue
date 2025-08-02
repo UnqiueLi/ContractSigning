@@ -100,17 +100,9 @@
 									// uni.setStorageSync('token', res.data.token);
 									// uni.setStorageSync('userInfo', res.data.userInfo);
 
-									uni.showToast({
-										title: '登录成功',
-										icon: 'success'
-									});
+								
 									this.getDecryptPhone(e)
-									// 登录成功，跳转到首页
-									setTimeout(() => {
-										uni.switchTab({
-											url: '/pages/tabbar/index/index'
-										});
-									}, 1500);
+									
 								} else {
 									uni.showToast({
 										title: res.msg || '登录失败',
@@ -159,9 +151,21 @@
 		},
 		getMyLogin(){
 			authApi.myLogin({phone:this.phoneNumber}).then(res => {
-				if(res && res.token){
+				console.log(res,"resresres111")
+				if(res.code===200 && res.token){
+					console.log(res,"resresres")
 					 uni.setStorageSync('token',res.token);
-					 this.getMyInfo()
+					 // 登录成功，跳转到首页
+					 uni.showToast({
+					 	title: '登录成功',
+					 	icon: 'success'
+					 });
+					 setTimeout(() => {
+					 	uni.switchTab({
+					 		url: '/pages/tabbar/index/index'
+					 	});
+					 }, 1500);
+					 // this.getMyInfo()
 				}
 			})
 		},

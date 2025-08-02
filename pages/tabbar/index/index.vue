@@ -28,8 +28,8 @@
 					<image class="user-avatar" :src="userAvatar" mode="aspectFill"></image>
 				</view>
 				<view class="user-detail">
+					<view class="seal-count">{{sealCount}}</view>
 					<view class="username">{{userName}}</view>
-					<view class="seal-count">可用签章的数：{{sealCount}}</view>
 				</view>
 				<view class="verify-icon">
 					<image src="/static/image/bgLogo.png" mode="" style="width: 136rpx;height: 100rpx;"></image>
@@ -100,7 +100,7 @@
 
 <script>
 	import {
-		userApi
+		userApi,authApi
 	} from '../../../api/user.js';
 	import settings from '../../../common/settings.js';
 	import {
@@ -114,7 +114,7 @@
 				httpUrl: "",
 				keyword: "",
 				userAvatar: "/static/image/profilePicture.png",
-				userName: "蓝群子",
+				userName: "",
 				sealCount: 0,
 				statsData: {
 					created: 16,
@@ -173,16 +173,10 @@
 			
 			// 获取用户信息
 			getUserInfo() {
-				const userInfo = uni.getStorageSync('userInfo');
-				if (userInfo && userInfo !== '') {
-					this.userId = userInfo.user?.userId
-					if (userInfo.user?.avatar) {
-						this.userAvatar = userInfo.user.avatar
-					}
-					if (userInfo.user?.userName) {
-						this.userName = userInfo.user.userName
-					}
-				}
+				authApi.myInfo().then(res => {
+					this.userName=res.user.userName
+					this.sealCount=res.user.nickName
+				})
 			},
 
 			// 获取合同列表
