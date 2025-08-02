@@ -8,30 +8,30 @@
                 </u-form-item>
 
                 <!-- 手机号/邮箱 -->
-                <u-form-item label="手机号/邮箱" prop="contact" :label-style="{ padding: '8rpx' }">
-                    <u-input v-model="formData.contact" placeholder="请输入手机号/邮箱" :custom-style="{ padding: '8rpx' }" />
+                <u-form-item label="手机号" prop="mobile" :label-style="{ padding: '8rpx' }">
+                    <u-input v-model="formData.mobile" placeholder="请输入手机号" :custom-style="{ padding: '8rpx' }" />
                 </u-form-item>
 
                 <!-- 真实姓名 -->
-                <u-form-item label="真实姓名" prop="realName" :label-style="{ padding: '8rpx' }">
+                <!-- <u-form-item label="真实姓名" prop="realName" :label-style="{ padding: '8rpx' }">
                     <u-input v-model="formData.realName" placeholder="请输入真实姓名" :custom-style="{ padding: '8rpx' }" />
-                </u-form-item>
+                </u-form-item> -->
 
                 <!-- 证件类型 -->
-                <u-form-item label="证件类型" prop="idType" :label-style="{ padding: '8rpx' }">
+                <!-- <u-form-item label="证件类型" prop="idType" :label-style="{ padding: '8rpx' }">
                     <u-input type="select" :select-open="selectShow"  v-model="formData.idType" placeholder="请选择证件类型"
                         @click="showIdTypePicker = true" :custom-style="{ padding: '8rpx' }" />
                     <u-select v-model="showIdTypePicker" mode="single-column" :list="idTypeList"
                         @confirm="onIdTypeConfirm" @cancel="showIdTypePicker = false" />
-                </u-form-item>
+                </u-form-item> -->
 
                 <!-- 证件号 -->
-                <u-form-item label="证件号" prop="idNumber" :label-style="{ padding: '8rpx' }">
-                    <u-input v-model="formData.idNumber" placeholder="请输入证件号" :custom-style="{ padding: '8rpx' }" />
+                <u-form-item label="证件号" prop="idCard" :label-style="{ padding: '8rpx' }">
+                    <u-input v-model="formData.idCard" placeholder="请输入证件号" :custom-style="{ padding: '8rpx' }" />
                 </u-form-item>
 
                 <!-- 签署方式 -->
-                <u-form-item label="签署方式" prop="signType" :label-style="{ backgroundColor: '#f6f7fb', padding: '8rpx' }">
+                <!-- <u-form-item label="签署方式" prop="signType" :label-style="{ backgroundColor: '#f6f7fb', padding: '8rpx' }">
                     <u-input 
                         type="select" 
                         :select-open="showSignTypeSelect" 
@@ -47,10 +47,10 @@
                         @confirm="onSignTypeConfirm" 
                         @cancel="showSignTypePicker = false" 
                     />
-                </u-form-item>
+                </u-form-item> -->
 
                 <!-- 意愿验证方式 -->
-                <u-form-item label="意愿验证方式" prop="verifyType" :label-style="{ backgroundColor: '#f6f7fb', padding: '8rpx' }">
+                <!-- <u-form-item label="意愿验证方式" prop="verifyType" :label-style="{ backgroundColor: '#f6f7fb', padding: '8rpx' }">
                     <u-input 
                         type="select" 
                         :select-open="showVerifyTypeSelect" 
@@ -66,10 +66,10 @@
                         @confirm="onVerifyTypeConfirm" 
                         @cancel="showVerifyTypePicker = false" 
                     />
-                </u-form-item>
+                </u-form-item> -->
 
                 <!-- 签署阅读设置 -->
-                <u-form-item label="签署阅读设置" prop="readAllDoc"
+                <!-- <u-form-item label="签署阅读设置" prop="readAllDoc"
                     :label-style="{ backgroundColor: '#f6f7fb', padding: '8rpx' }">
                     <view class="form-item-flex">
                         <view class="form-item-input">
@@ -81,15 +81,15 @@
                             <u-switch v-model="formData.readTimeLimit" activeColor="#2979ff" />
                         </view>
                     </view>
-                </u-form-item>
+                </u-form-item> -->
                 <!-- 附件要求 -->
-                <u-form-item :label="`附件要求 (剩余: ${attachmentRemain})`" prop="attachmentRequired" :border-bottom="false"
+                <!-- <u-form-item :label="`附件要求 (剩余: ${attachmentRemain})`" prop="attachmentRequired" :border-bottom="false"
                     :label-style="{ backgroundColor: '#f6f7fb', padding: '8rpx' }">
                     <view class="form-item-input">
                         <text class="switch-label">要求上传附件</text>
                         <u-switch v-model="formData.attachmentRequired" activeColor="#2979ff" />
                     </view>
-                </u-form-item>
+                </u-form-item> -->
             </u-form>
         </view>
 
@@ -104,47 +104,24 @@
 </template>
 
 <script>
+import { addUserApi } from '../../../api/user';
+
 export default {
   data() {
     return {
       formData: {
         name: '',
-        contact: '',
-        realName: '',
-        idType: '',
-        idNumber: '',
-        signType: '不限制签名方式',
-        verifyType: '签署密码、短信验证、人脸识别',
-        readAllDoc: false,
-        readTimeLimit: false,
-        attachmentRequired: false,
+            mobile: '',
+        idCard:'',
+   
       },
       idTypeList: [
         { label: '中国居民身份证', value: '中国居民身份证' },
-        { label: '护照', value: '护照' },
-        { label: '军官证', value: '军官证' },
-        { label: '港澳通行证', value: '港澳通行证' },
-        { label: '台湾通行证', value: '台湾通行证' }
+       
       ],
        
-      signTypeList: [
-        { label: '不限制签名方式', value: '不限制签名方式' },
-        { label: '手写签名', value: '手写签名' },
-        { label: '电子签名', value: '电子签名' },
-        { label: '印章签名', value: '印章签名' }
-      ],
-      verifyTypeList: [
-        { label: '签署密码、短信验证、人脸识别', value: '签署密码、短信验证、人脸识别' },
-        { label: '仅签署密码', value: '仅签署密码' },
-        { label: '仅短信验证', value: '仅短信验证' },
-        { label: '仅人脸识别', value: '仅人脸识别' }
-      ],
       showIdTypePicker: false,
-      showSignTypePicker: false,
-      showVerifyTypePicker: false,
-      showSignTypeSelect: false,
-      showVerifyTypeSelect: false,
-      attachmentRemain: 9,
+   
     }
   },
   methods: {
@@ -152,15 +129,36 @@ export default {
       uni.navigateBack();
     },
     onSubmit() {
-      this.$refs.uForm.validate(valid => {
-        if (valid) {
-          uni.showToast({
-            title: '保存成功',
-            icon: 'success'
-          });
+        this.$refs.uForm.validate(async (valid) => {
+          if (valid){
+            try {
+                const res = await addUserApi.add({
+                    ...this.formData,
+                    type:2
+                })
+                if (res.code === 200) {
+                      uni.showToast({
+                        title: '保存成功',
+                        icon: 'success'
+                      });
+                    // 发送刷新事件
+                    uni.$emit('refreshUserList');
           setTimeout(() => {
             uni.navigateBack();
           }, 1500);
+                } else {
+                    uni.showToast({
+                        title: res.msg,
+                        icon: 'none'
+                    });
+                }
+            } catch (error) {
+                uni.showToast({
+                    title: res.msg,
+                    icon: 'none'
+                });
+            }
+     
         }
       });
     },
@@ -168,14 +166,6 @@ export default {
       this.formData.idType = e[0].label;
       this.showIdTypePicker = false;
     },
-    onSignTypeConfirm(e) {
-      this.formData.signType = e[0].label;
-      this.showSignTypePicker = false;
-    },
-    onVerifyTypeConfirm(e) {
-      this.formData.verifyType = e[0].label;
-      this.showVerifyTypePicker = false;
-    }
   }
 }
 </script>
@@ -186,8 +176,8 @@ export default {
   background-color: #fff;
 }
 .form-container{
-    height: calc(100vh - 100rpx);
-    overflow-y: auto;
+    // height: calc(100vh - 100rpx);
+    // overflow-y: auto;
     padding: 22rpx 32rpx 100rpx;
 }
 .form-item-flex{
