@@ -14,7 +14,7 @@
                     <view class="form-item">
                         <view class="form-item-label">发起方</view>
                         <view class="form-item-input">
-                            <u-input v-model="formData.initiator" placeholder="请输入发起方" />
+                            <u-input v-model="formData.initiator" placeholder="请输入发起方" disabled/>
                         </view>
                     </view>
                     <view class="form-line"></view>
@@ -53,40 +53,48 @@
                 <!-- 参与方 -->
                 <view class="form-card">
                     <view class="participants-header">
-                        <view class="participants-title">参与方 (3)</view>
+                        <view class="participants-title">参与方 ({{ listData.length }})</view>
+                        <view class="participants-subtitle">{{ selectedParticipant ? '已选择参与方' : '请选择一个参与方' }}</view>
                     </view>
 
                     <view class="participants-list">
-                        <view class="participant-item" v-for="n in listData">
-                            <template v-if="n.name">
-                                <u-avatar src="/static/image/userInfo.png" size="35"></u-avatar>
-                                <text class="participant-name">{{ n.name }}</text>
-                                <view class="participant-icon">
-                                    <u-icon name="trash" size="40" style="color: #fab6b6;"></u-icon>
+                        <!-- 参与方列表 -->
+                        <view v-if="listData.length > 0">
+                            <view class="participant-item" v-for="item in listData" :key="item.id" @click="selectParticipant(item.id)">
+                            <view class="participant-info">
+                                <view class="selection-indicator">
+                                    <u-icon 
+                                        :name="selectedParticipant === item.id ? 'checkbox-mark' : 'circle'" 
+                                        :color="selectedParticipant === item.id ? '#3758FE' : '#C0C4CC'" 
+                                        size="20">
+                                    </u-icon>
                                 </view>
-                            </template>
+                                <u-avatar src="/static/image/userInfo.png" size="35"></u-avatar>
+                                <view class="participant-details">
+                                    <text class="participant-name">{{ item.name }}</text>
+                                    <text class="participant-type">{{ item.type === 1 ? '企业' : '个人' }}</text>
+                                </view>
+                            </view>
+                            <view class="participant-actions" @click.stop="delFun(item.id)">
+                                <u-icon name="trash" size="22" color="#6c757d" class="delete-icon"></u-icon>
+                            </view>
                         </view>
-                        <!-- <view class="participant-item">
-							<u-avatar src="/static/image/userInfo.png" size="35"></u-avatar>
-							<text class="participant-name">蓝胖子</text>
-							<view class="participant-icon">
-								<u-icon name="trash" size="40" style="color: #fab6b6;"></u-icon>
-							</view>
-						</view>
-						<view class="participant-item">
-							<u-avatar src="/static/image/userInfo.png" size="35"></u-avatar>
-							<text class="participant-name">蓝胖子</text>
-							<view class="participant-icon">
-								<u-icon name="trash" size="40" style="color: #fab6b6;"></u-icon>
-							</view>
-						</view> -->
+                            </view>
                     </view>
 
                     <view class="btn-group">
-                        <view class="custom-btn" @click="addUser(1)">添加个人</view>
-                        <view class="custom-btn" @click="addUser(2)">添加企业</view>
+                        <view class="custom-btn" @click="addUser(1)">
+                            <u-icon name="account" size="16" color="#3758FE"></u-icon>
+                            <text>添加个人</text>
+                        </view>
+                        <view class="custom-btn" @click="addUser(2)">
+                            <u-icon name="home" size="16" color="#3758FE"></u-icon>
+                            <text>添加企业</text>
+                        </view>
                     </view>
                 </view>
+
+
 
                 <!-- 抄送 -->
                 <!-- <view class="form-card">
@@ -125,7 +133,7 @@
 
                 <!-- 底部按钮 -->
                 <view class="bottom-actions">
-                    <u-button type="primary" class="submit-btn">提交任务</u-button>
+                    <u-button type="primary" class="submit-btn"  @click="getAddContract()">提交任务</u-button>
                 </view>
             </view>
         </view>
@@ -138,7 +146,7 @@
 
 <script>
 	import settings from '@/common/settings.js';
-import { addUserApi } from '../../../api/user';
+import { addUserApi,userApi  } from '../../../api/user';
 	export default {
 		data() {
 			return {
@@ -165,10 +173,13 @@ import { addUserApi } from '../../../api/user';
 					color: '#406DFF',
 					backgroundColor: '#fff'
                 },
-                listData:[]
+                listData:[],
+                selectedParticipant: null
 			};
 		},
 		onLoad() {
+			this.formData.initiator=uni.getStorageSync('phoneNumber');
+			console.log(this.formData.initiator,"this.formData.initiator")
             // 监听刷新事件
             uni.$on('refreshUserList', () => {
                 this.getList();
@@ -192,7 +203,106 @@ import { addUserApi } from '../../../api/user';
                 this.listData=res?.data
             }
          },
-        
+        selectParticipant(id) {
+            this.selectedParticipant = id;
+        },
+        async  delFun(id) {
+			uni.showModal({
+				title: '确认删除',
+				content: '确定要删除这个参与方吗？',
+				success: async (res) => {
+					if (res.confirm) {
+						try {
+							const result = await addUserApi.merchantRemove(id)
+							if (result.code === 200) {
+								// 如果删除的参与方是当前选中的，清空选择
+								if (this.selectedParticipant === id) {
+									this.selectedParticipant = null;
+								}
+								uni.showToast({
+									title: '删除成功',
+									icon: 'success'
+								});
+								this.getList()
+							} else {
+								uni.showToast({
+									title: result.msg || '删除失败',
+									icon: 'none'
+								});
+							}
+						} catch (error) {
+							uni.showToast({
+								title: '删除失败，请重试',
+								icon: 'none'
+							});
+						}
+					}
+				}
+			});
+        },
+		getAddContract() {
+			// 验证必填字段
+			if (!this.formData.title.trim()) {
+				uni.showToast({
+					title: '请输入任务主题',
+					icon: 'none'
+				});
+				return;
+			}
+			
+			if (!this.formData.deadline) {
+				uni.showToast({
+					title: '请选择截止时间',
+					icon: 'none'
+				});
+				return;
+			}
+			
+			if (this.listData.length === 0) {
+				uni.showToast({
+					title: '请至少添加一个参与方',
+					icon: 'none'
+				});
+				return;
+			}
+			
+			if (!this.selectedParticipant) {
+				uni.showToast({
+					title: '请选择一个参与方',
+					icon: 'none'
+				});
+				return;
+			}
+			
+			const parmas={
+				title:this.formData.title,
+				url:this.files.url,
+				merchantId:this.formData.initiator,
+				status:'1',
+				participantsBy:'5',
+				deadline:this.formData.deadline,
+				selectedParticipant: this.selectedParticipant
+			}
+			userApi.addContract(parmas).then(res => {
+				if (res.code === 200) {
+					uni.showToast({
+						title: '任务创建成功',
+						icon: 'success'
+					});
+					// 可以在这里跳转到任务列表页面
+				} else {
+					uni.showToast({
+						title: res.msg || '创建失败',
+						icon: 'none'
+					});
+				}
+			}).catch(err => {
+				uni.showToast({
+					title: '创建失败，请重试',
+					icon: 'none'
+				});
+			})
+		},
 			// 触发文件选择
 			triggerFile() {
 				// #ifdef MP-WEIXIN
@@ -317,7 +427,9 @@ import { addUserApi } from '../../../api/user';
 					title: '添加抄送企业',
 					icon: 'none'
 				});
-			}
+			},
+			
+
 		}
 	}
 </script>
@@ -456,26 +568,64 @@ import { addUserApi } from '../../../api/user';
 		color: #333;
 	}
 	
+	.participants-subtitle {
+		font-size: 24rpx;
+		color: #999;
+		margin-top: 8rpx;
+	}
+	
 	.participants-list {
 		padding: 0 32rpx;
 	}
 	
+	.empty-state {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 80rpx 0;
+		color: #C0C4CC;
+		font-size: 28rpx;
+	}
+	
+	.empty-text {
+		margin-top: 20rpx;
+	}
+	
 	.participant-item {
 		display: flex;
+		justify-content: space-between;
 		align-items: center;
 		padding: 16rpx 0;
 		border-bottom: 2rpx solid #f5f5f5;
-		image{
-			width: 30rpx;
-			height: 30rpx;
-		}
+	}
+	
+	.participant-info {
+		display: flex;
+		align-items: center;
+	}
+	
+	.selection-indicator {
+		margin-right: 20rpx;
+		padding: 10rpx;
+	}
+	
+	.participant-details {
+		margin-left: 20rpx;
 	}
 	
 	.participant-name {
-		flex: 1;
-		margin-left: 20rpx;
 		font-size: 28rpx;
 		color: #333;
+	}
+	
+	.participant-type {
+		font-size: 24rpx;
+		color: #999;
+	}
+	
+	.participant-actions {
+		display: flex;
+		align-items: center;
 	}
 	
 	.participant-icon {
@@ -566,4 +716,6 @@ import { addUserApi } from '../../../api/user';
 	.submit-btn {
 		width: 100%;
 	}
+	
+
 </style>

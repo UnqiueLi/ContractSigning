@@ -87,7 +87,44 @@ const safeRequestGet = (url, method = 'get') => {
 		});
 	});
 };
+const safeRequestDelete = (url, method = 'delete') => {
+	return new Promise((resolve, reject) => {
+		const baseUrl = process.env.NODE_ENV === 'development' ? settings.devUrl : settings.prodUrl;
 
+		// 获取token
+		const token = uni.getStorageSync('token');
+
+		uni.request({
+			url: baseUrl + url,
+			method: method,
+			// data: data,
+			header: {
+				'Authorization': 'Bearer ' + token
+				// [settings.headerTokenName]: token // 添加token到header
+			},
+			success: (res) => {
+				console.log(`${url} 响应原始数据:`, res);
+
+				let responseData;
+				try {
+					responseData = typeof res.data === 'string' ? JSON.parse(res.data) : res
+						.data;
+				} catch (e) {
+					console.error('响应数据解析错误:', e);
+					console.log('原始响应文本:', res.data);
+					reject(new Error('服务器响应格式错误'));
+					return;
+				}
+
+				resolve(responseData);
+			},
+			fail: (err) => {
+				console.error(`${url} 请求失败:`, err);
+				reject(err);
+			}
+		});
+	});
+};
 
 /**
  * 用户登录与认证相关API
@@ -109,7 +146,7 @@ const userApi = {
 	contractList: () => safeRequestGet('/mini/getContractList'), //上传图片
 	certificate: (data) => safeRequest('/mini/personalCertificate', data), //实名认证
 	bindRealName: (data) => safeRequest('/mini/bindRealName',data), //绑定实名
-	// getInfo: () => safeRequestGet('/mini/getInfo'), //获取个人信息
+	addContract: (data) => safeRequest('/mini/addContract',data), //创建合同任务
 	// edit: (data) => safeRequest('/mini/pasture/edit', data), //修改牧草信息
 	// pastureList: (id) => safeRequestGet('/mini/pasture/' + id), //牧草信息列表
 	// edit: (data) => safeRequest('/mini/pasture/edit', data), //修改牧草信息
@@ -124,7 +161,8 @@ const userApi = {
 
 const addUserApi = {
     add: (data) => safeRequest('/mini/addMerchant', data), // 新增个人、新增企业
-    list: () => safeRequestGet('/mini/getMerchantList')
+    list: () => safeRequestGet('/mini/getMerchantList'),
+	merchantRemove: (id) => safeRequestDelete('/mini/merchantRemove/' + id)
 };
 
 export {
