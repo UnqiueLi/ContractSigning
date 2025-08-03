@@ -88,15 +88,12 @@
 				<view class="strength-bars">
 					<view 
 						class="strength-bar" 
-						:class="getStrengthClass(0)"
 					></view>
 					<view 
 						class="strength-bar" 
-						:class="getStrengthClass(1)"
 					></view>
 					<view 
 						class="strength-bar" 
-						:class="getStrengthClass(2)"
 					></view>
 				</view>
 				<text class="strength-label">{{ getStrengthText() }}</text>
@@ -152,7 +149,7 @@
 			},
 			codeButtonText() {
 				return this.countdown > 0 ? `${this.countdown}s后重发` : '发送验证码';
-			}
+			},
 		},
 		methods: {
 			// 跳转到登录页
@@ -242,14 +239,7 @@
 				}, 2000);
 			},
 
-			// 获取密码强度样式
-			getStrengthClass(index) {
-				const strength = this.getPasswordStrength();
-				if (index < strength) {
-					return `strength-${strength}`;
-				}
-				return '';
-			},
+			
 
 			// 获取密码强度文本
 			getStrengthText() {
@@ -284,7 +274,7 @@
 </script>
 
 <style lang="scss">
-	page {
+	.page {
 		background: linear-gradient(156.76deg, #D4E2F8 0%, #F8F9FA 100%);
 		min-height: 100vh;
 		padding-bottom: 100rpx;
