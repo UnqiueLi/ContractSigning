@@ -38,7 +38,7 @@
 			return {
 				selectedContract: '',
 				isAgree: false,
-				phoneNumber:''
+				phoneNumber:'15794119711'
 			}
 		},
 		methods: {
@@ -152,8 +152,8 @@
 									iv: e.target.iv,
 								}
 								authApi.decryptPhone(parmas).then(res => {
-									this.phoneNumber=res.phone
-									uni.setStorageSync('phoneNumber', res.phone);
+									this.phoneNumber="15794119711"
+									uni.setStorageSync('phoneNumber',this.phoneNumber);
 									this.getMyLogin()
 								})
 							}
@@ -172,17 +172,18 @@
 					 	title: '登录成功',
 					 	icon: 'success'
 					 });
+					 this.getMyInfo()
 					 setTimeout(() => {
 					 	uni.switchTab({
 					 		url: '/pages/tabbar/index/index'
 					 	});
 					 }, 1500);
-					 // this.getMyInfo()
 				}
 			})
 		},
 		getMyInfo(){
 			authApi.myInfo().then(res => {
+				uni.setStorageSync('userId',res.user.userId);
 			})
 		},
 		// 原登录方法，已由getPhoneNumber替代

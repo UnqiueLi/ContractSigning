@@ -187,8 +187,9 @@
 			},
 			// 查看合同详情
 			viewContract(id) {
+				console.log(id,"滴滴滴滴")
 				uni.navigateTo({
-					url: '/subpkg_index/pages/contract/detail?id=' + id
+					url: '/subpkg_index/pages/modifyInformation/index?id=' + id
 				})
 			},
 

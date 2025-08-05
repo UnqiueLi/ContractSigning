@@ -93,44 +93,6 @@
                         </view>
                     </view>
                 </view>
-
-
-
-                <!-- 抄送 -->
-                <!-- <view class="form-card">
-					<view class="copy-section">
-						<view class="copy-title">抄送</view>
-						<view class="copy-links">
-							<text class="link-text" @click="addPersonCopy">抄送个人</text>
-							<text class="link-text" @click="addCompanyCopy">抄送企业</text>
-						</view>
-					</view>
-				</view> -->
-
-                <!-- 签署设置 -->
-                <view class="form-card">
-                    <!-- <view class="sign-item">
-						<text class="sign-text">要求签署的必须证书机构为CFCA</text>
-						<u-switch v-model="requireCFCA"></u-switch>
-					</view> -->
-
-                    <view class="sign-method">
-                        <text class="sign-text">签署方式</text>
-                        <u-radio-group v-model="signMethod">
-                            <view class="sign-options">
-                                <view class="sign-option">
-                                    <u-radio name="manual" :checked="signMethod === 'manual'"></u-radio>
-                                    <text class="sign-option-text">手动签署</text>
-                                </view>
-                                <view class="sign-option">
-                                    <u-radio name="auto" :checked="signMethod === 'auto'"></u-radio>
-                                    <text class="sign-option-text">自动签署</text>
-                                </view>
-                            </view>
-                        </u-radio-group>
-                    </view>
-                </view>
-
                 <!-- 底部按钮 -->
                 <view class="bottom-actions">
                     <u-button type="primary" class="submit-btn"  @click="getAddContract()">提交任务</u-button>
@@ -178,12 +140,12 @@ import { addUserApi,userApi  } from '../../../api/user';
 			};
 		},
 		onLoad() {
-			this.formData.initiator=uni.getStorageSync('phoneNumber');
-			console.log(this.formData.initiator,"this.formData.initiator")
-            // 监听刷新事件
-            uni.$on('refreshUserList', () => {
-                this.getList();
-            }); 
+				this.formData.initiator=uni.getStorageSync('phoneNumber');
+				console.log(this.formData.initiator,"this.formData.initiator")
+				// 监听刷新事件
+				uni.$on('refreshUserList', () => {
+				    this.getList();
+				}); 
 		},
     onUnload() {
         // 页面卸载时移除监听
@@ -203,6 +165,12 @@ import { addUserApi,userApi  } from '../../../api/user';
                 this.listData=res?.data
             }
          },
+		 async  getContractInfo(id) {
+		    const res = await userApi.contractInfo(id)
+		    if (res.code === 200) {
+		   
+		    }
+		 },
         selectParticipant(id) {
             this.selectedParticipant = id;
         },
@@ -276,12 +244,13 @@ import { addUserApi,userApi  } from '../../../api/user';
 			
 			const parmas={
 				title:this.formData.title,
-				url:this.files.url,
-				merchantId:this.formData.initiator,
+				url:this.files[0].url,
+				merchantId:uni.getStorageSync('userId'),
 				status:'1',
-				participantsBy:'5',
+				participantsBy:this.selectedParticipant,
 				deadline:this.formData.deadline,
-				selectedParticipant: this.selectedParticipant
+				selectedParticipant: this.selectedParticipant,
+				remark:this.files[0].fileName
 			}
 			userApi.addContract(parmas).then(res => {
 				if (res.code === 200) {

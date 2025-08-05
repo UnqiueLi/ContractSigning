@@ -42,6 +42,13 @@
 			{
 				"navigationBarTitleText" : "实名认证"
 			}
+		},
+		{
+			"path" : "pages/modifyInformation/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : "修改合同"
+			}
 		}
 	  ]
     },

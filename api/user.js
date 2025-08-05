@@ -147,9 +147,9 @@ const userApi = {
 	certificate: (data) => safeRequest('/mini/personalCertificate', data), //实名认证
 	bindRealName: (data) => safeRequest('/mini/bindRealName',data), //绑定实名
 	addContract: (data) => safeRequest('/mini/addContract',data), //创建合同任务
-	// edit: (data) => safeRequest('/mini/pasture/edit', data), //修改牧草信息
-	// pastureList: (id) => safeRequestGet('/mini/pasture/' + id), //牧草信息列表
-	// edit: (data) => safeRequest('/mini/pasture/edit', data), //修改牧草信息
+	contractInfo: (id) => safeRequestGet('/mini/getContractInfo/'+ id), //修改牧草信息
+	contractUpload: (data) => safeRequest('/mini/contractUpload',data), //合同上传
+	manuallySign: (data) => safeRequest('/mini/manuallySign', data), //合同签署
 	// userListCg: (id) => safeRequestGet('/mini/userList'),//牧户列表
 	// addUser: (data) => safeRequest('/mini/addUser',data),//新增牧户
 	

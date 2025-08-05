@@ -124,7 +124,7 @@
 		methods: {
 			getRegister(){
 				userApi.register({type:'1'}).then(res => {
-					uni.setStorageSync('res.data');
+					uni.setStorageSync("contractId",res.data);
 					this.getCertificate(res.data)
 				})
 			},
@@ -139,6 +139,8 @@
 					mobile:this.phoneNumber,
 					certType:'0',
 					isMiniProgram:'0',
+					idPhotoOptional:'2',
+					returnUrl:'/subpkg_index/pages/authentication/index'
 				}
 				userApi.certificate(parmas).then(res => {
 					if(res.code===1){
