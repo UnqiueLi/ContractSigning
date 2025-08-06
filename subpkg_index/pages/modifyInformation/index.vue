@@ -129,12 +129,13 @@ import { maskPhone } from '../../../utils/desensitize';
                 this.getContractInfo(id)
             } else {
                 this.listData = JSON.parse(uni.getStorageSync('listDataPrev'))
+                this.getContractPlaceOnFile()
             }
 		
             
-			if(this.fileUrl){
-				this.getContractPlaceOnFile()
-			}
+			// if(this.fileUrl){
+			// 	this.getContractPlaceOnFile()
+			// }
 		},
 		created() {
 		},
@@ -155,7 +156,10 @@ import { maskPhone } from '../../../utils/desensitize';
 			console.log(this.UploadcontractId,"sthis.UploadcontractId")
 		   const res = await userApi.contractDownload(this.UploadcontractId)
 		   if (res.code === 200) {
-			   this.fddUrl=res.result
+				// this.files.remark=res.result
+               console.log(res.result,'res.result')
+               this.listData = { ...this.listData, url:res.result }
+               console.log(this.listData,'this.listData ')
 		   }
 		},
 		 async  getContractInfo(id) {
