@@ -14,37 +14,17 @@
 					<image class="avatar-img" src="/static/image/bg-header.png" mode=""></image>
 				</view>
 				<view class="login-info">
-					<view class="login-title">登录/注册</view>
+					<view class="login-title">登录</view>
 					<view class="login-subtitle">Hi,欢迎加入体验更多功能</view>
 				</view>
 			</view>
 
 			<!-- 菜单列表 -->
 			<view class="menu-list">
-				<view class="menu-item" @click="goToPersonalInfo">
-					<view class="menu-left">
-						<image src="/static/image/icon1.png" mode="aspectFit" class="menu-icon blue-icon"></image>
-						<text class="menu-title">个人信息</text>
-					</view>
-					<view class="menu-right">
-						<u-icon name="arrow-right" color="#c0c4cc"></u-icon>
-					</view>
-				</view>
-
 				<view class="menu-item" @click="goToAuthentication">
 					<view class="menu-left">
 						<image src="/static/image/icon2.png" mode="aspectFit" class="menu-icon blue-icon"></image>
 						<text class="menu-title">实名认证</text>
-					</view>
-					<view class="menu-right">
-						<u-icon name="arrow-right" color="#c0c4cc"></u-icon>
-					</view>
-				</view>
-
-				<view class="menu-item" @click="goToForgotPassword">
-					<view class="menu-left">
-						<image src="/static/image/icon3.png" mode="aspectFit" class="menu-icon blue-icon"></image>
-						<text class="menu-title">忘记密码</text>
 					</view>
 					<view class="menu-right">
 						<u-icon name="arrow-right" color="#c0c4cc"></u-icon>
@@ -81,19 +61,6 @@
 				const token = uni.getStorageSync('token');
 				this.isLoggedIn = !!token;
 			},
-
-			// 跳转到个人信息
-			goToPersonalInfo() {
-				if (!this.isLoggedIn) {
-					this.goToLogin();
-					return;
-				}
-
-				uni.navigateTo({
-					url: '/subpkg_user/pages/personalInfo/personalInfo'
-				});
-			},
-
 			// 跳转到实名认证
 			goToAuthentication() {
 				if (!this.isLoggedIn) {
@@ -103,13 +70,6 @@
 
 				uni.navigateTo({
 					url: '/subpkg_index/pages/authentication/index'
-				});
-			},
-
-			// 跳转到忘记密码页面
-			goToForgotPassword() {
-				uni.navigateTo({
-					url: '/subpkg_login/pages/resetPassword/resetPassword'
 				});
 			},
 

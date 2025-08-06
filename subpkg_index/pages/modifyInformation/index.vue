@@ -130,6 +130,7 @@ import { addUserApi,userApi  } from '../../../api/user';
 		    const res = await userApi.contractInfo(id)
 		    if (res.code === 200) {
 				this.listData=res?.data
+				this.listData.merchantName=this.listData.merchantName.replace(/^(\d{3})(\d{4})(\d{4})$/, "$1****$3")
 		    }
 		 },
 		 async  geTmanuallySign(contractId) {
@@ -137,10 +138,16 @@ import { addUserApi,userApi  } from '../../../api/user';
 				contractId:contractId,
 				customerId:uni.getStorageSync("contractId"),
 				title:this.files.remark,
-				signKeyword:'张三'
+				signKeyword:'张三',
+				returnUrl:'/subpkg_index/pages/modifyInformation/index',
+				openEnvironment:'4'
 			}
 		    const res = await userApi.manuallySign(parmas)
 		    if (res.code === 200) {
+				console.log(res.result,"res.result")
+				uni.navigateTo({
+				  url: '/subpkg_index/pages/webview/index?url=' + encodeURIComponent(res.result)
+				});
 		    }
 		 },
 		 async  getContractUpload() {
@@ -181,10 +188,11 @@ import { addUserApi,userApi  } from '../../../api/user';
 				status:'1',
 				participantsBy:'5',
 				deadline:this.formData.deadline,
-				selectedParticipant: this.selectedParticipant
+				selectedParticipant: this.selectedParticipant,
 			}
 			userApi.addContract(parmas).then(res => {
 				if (res.code === 200) {
+					
 					uni.showToast({
 						title: '任务创建成功',
 						icon: 'success'

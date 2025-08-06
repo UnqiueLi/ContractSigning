@@ -9,12 +9,6 @@
 			<view class="top-menu" style="height: 150rpx;">
 				<!-- 此处可添加顶部菜单栏内容 -->
 			</view>
-
-			<!-- 顶部搜索栏 -->
-			<view class="search-box">
-				<u-search placeholder="请输入想搜索的名词" v-model="keyword" :show-action="false" :clearabled="true"
-					shape="round"></u-search>
-			</view>
 		</view>
 
 		<!-- 顶部背景区域 -->
@@ -138,13 +132,13 @@
 				navFixedThreshold: 50
 			}
 		},
-		onLoad() {
-			this.httpUrl = settings.devUrl
+		created() {
 			this.getUserInfo()
 			this.getContractList()
 			// 获取固定导航的高度
 			this.getFixedNavHeight()
 			this.getContractCount()
+			this.httpUrl = settings.devUrl
 		},
 		onPageScroll(e) {
 			// 监听页面滚动

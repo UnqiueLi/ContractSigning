@@ -108,6 +108,7 @@
 				phoneNumber:'',
 				showModal:false,
 				content:'',
+				verifiedSerialNo:'',
 				
 			}
 		},
@@ -118,14 +119,32 @@
 					   this.agreementChecked;
 			}
 		},
+		onShow() {
+			
+		},
 		created() {
 			this.phoneNumber=uni.getStorageSync('phoneNumber');
+			this.verifiedSerialNo=uni.getStorageSync("verifiedSerialNo");
+			console.log(this.verifiedSerialNo,"this.verifiedSerialNo")
+			if(this.verifiedSerialNo){
+				this.getBindRealName()
+			}
 		},
 		methods: {
 			getRegister(){
 				userApi.register({type:'1'}).then(res => {
 					uni.setStorageSync("contractId",res.data);
 					this.getCertificate(res.data)
+				})
+			},
+			getBindRealName(){
+				userApi.bindRealName({customerId:uni.getStorageSync("contractId"),verifiedSerialNo:this.verifiedSerialNo}).then(res => {
+					if(res.code===3205){
+						this.content=res.msg
+					}else if(res.code===1){
+						this.content="恭喜您实名认证成功"
+					}
+					this.showModal=true
 				})
 			},
 			getCertificate(code){
@@ -138,14 +157,15 @@
 					customerIdentNo:this.idNumber,
 					mobile:this.phoneNumber,
 					certType:'0',
-					isMiniProgram:'0',
+					isMiniProgram:'3',
 					idPhotoOptional:'2',
-					returnUrl:'/subpkg_index/pages/authentication/index'
+					returnUrl:'wx://subpkg_index/pages/authentication/index'
 				}
 				userApi.certificate(parmas).then(res => {
 					if(res.code===1){
 						 console.log( Base64.decode(res.data.url),"sssss66644")
 						 const baseUrl=Base64.decode(res.data.url)
+						 uni.setStorageSync("verifiedSerialNo",res.data.transactionNo);
 						 uni.navigateTo({
 						   url: '/subpkg_index/pages/webview/index?url=' + encodeURIComponent(baseUrl)
 						 });
