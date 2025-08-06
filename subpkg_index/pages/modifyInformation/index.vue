@@ -40,8 +40,8 @@
                 </view>
                 <view class="form-card filesBox">
                     <view class="fileNameBox">
-                        <text  @click="downloadFile()" v-if="files.remark">{{files.remark}}</text>
-						<text  @click="downloadFile()" v-else>{{listData.remark}}</text>
+                        <!-- <text  @click="downloadFile()" v-if="files.remark">{{files.remark}}</text> -->
+						<text  @click="downloadFile()">{{listData.remark}}</text>
                     </view>
                 </view>
                 <!-- 参与方 -->
@@ -124,12 +124,14 @@ import { maskPhone } from '../../../utils/desensitize';
             this.UploadcontractId = uni.getStorageSync("UploadcontractId");
             let id = ''
             if (options.id) {
-                uni.setStorageSync('id', options.id)
+                // uni.setStorageSync('id', options.id)
                 id = options.id 
+                this.getContractInfo(id)
             } else {
-                id = uni.getStorageSync('id')
+                this.listData = JSON.parse(uni.getStorageSync('listDataPrev'))
             }
-			this.getContractInfo(id)
+		
+            
 			if(this.fileUrl){
 				this.getContractPlaceOnFile()
 			}
@@ -174,7 +176,8 @@ import { maskPhone } from '../../../utils/desensitize';
 		    const res = await userApi.manuallySign(parmas)
 		    if (res.code === 200) {
 				console.log(res.result,"res.result")
-				uni.setStorageSync("fileUrl",res.result);
+                uni.setStorageSync("fileUrl", res.result);
+                uni.setStorageSync('listDataPrev', JSON.stringify(this.listData))
 				uni.navigateTo({
 				  url: '/subpkg_index/pages/webview/index?url=' + encodeURIComponent(res.result)
 				});
@@ -341,7 +344,8 @@ import { maskPhone } from '../../../utils/desensitize';
 								this.files={
 									remark: file.name,
 									url: result.fileName,
-								};
+                                };
+                                this.listData = { ...this.listData,...this.files}
 								console.log(this.files,"this.files.files")
 								this.getContractUpload()
 								uni.showToast({
