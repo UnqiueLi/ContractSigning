@@ -83,7 +83,7 @@
 <script>
 	import settings from '@/common/settings.js';
 import { addUserApi,userApi  } from '../../../api/user';
-import { maskPhone } from '../../../utils/desensitize';
+import { maskPhone, isOnlineFile } from '../../../utils/desensitize';
 	export default {
 		data() {
 			return {
@@ -251,8 +251,9 @@ import { maskPhone } from '../../../utils/desensitize';
 		},
 		downloadFile(item, e) {
 			console.log(item, e, "sssss")
+            
 			uni.downloadFile({
-				url: this.baseUrl + this.listData.url,
+                url: isOnlineFile(this.listData.url) ? this.listData.url : this.baseUrl + this.listData.url,
 				method: 'GET',
 				success: (res) => {
 					if (res.statusCode === 200) {
