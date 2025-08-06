@@ -152,8 +152,7 @@ const userApi = {
 	manuallySign: (data) => safeRequest('/mini/manuallySign', data), //合同签署
 	contractPlaceOnFile: (id) => safeRequestGet('/mini/contractPlaceOnFile/' + id),//合同归档
 	contractDownload: (id) => safeRequestGet('/mini/contractDownload/' + id),//合同下载
-	
-	// getUserInfo: (id) => safeRequestGet('/mini/getUserInfo/' + id), //牧草信息列表
+	editContract: (data) => safeRequest('/mini/editContract',data), //修改合同提交
 	
 	
 	

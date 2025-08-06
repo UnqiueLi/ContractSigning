@@ -155,7 +155,7 @@ import { maskPhone } from '../../../utils/desensitize';
 			console.log(this.UploadcontractId,"sthis.UploadcontractId")
 		   const res = await userApi.contractDownload(this.UploadcontractId)
 		   if (res.code === 200) {
-				this.files.remark=res.result
+			   this.fddUrl=res.result
 		   }
 		},
 		 async  getContractInfo(id) {
@@ -191,40 +191,17 @@ import { maskPhone } from '../../../utils/desensitize';
 		    }
 		 },
 		getAddContract() {
-			// 验证必填字段
-			if (!this.listData.title.trim()) {
-				uni.showToast({
-					title: '请输入任务主题',
-					icon: 'none'
-				});
-				return;
-			}
-			
-			if (!this.listData.deadline) {
-				uni.showToast({
-					title: '请选择截止时间',
-					icon: 'none'
-				});
-				return;
-			}
-			
-			if (this.listData.length === 0) {
-				uni.showToast({
-					title: '请至少添加一个参与方',
-					icon: 'none'
-				});
-				return;
-			}
 			const parmas={
-				title:this.formData.title,
+				title:this.listData.title,
 				url:this.files.url,
-				merchantId:this.formData.initiator,
+				merchantId:this.listData.initiator,
 				status:'1',
 				participantsBy:'5',
-				deadline:this.formData.deadline,
-				selectedParticipant: this.selectedParticipant,
+				deadline:this.listData.deadline,
+				selectedParticipant: this.listData.participantsByName,
+				id:'',
 			}
-			userApi.addContract(parmas).then(res => {
+			userApi.editContract(parmas).then(res => {
 				if (res.code === 200) {
 					
 					uni.showToast({
@@ -248,7 +225,7 @@ import { maskPhone } from '../../../utils/desensitize';
 		downloadFile(item, e) {
 			console.log(item, e, "sssss")
 			uni.downloadFile({
-				url: this.baseUrl + this.listData.url,
+				url: this.fddUrl ? this.fddUrl : this.baseUrl + this.listData.url,
 				method: 'GET',
 				success: (res) => {
 					if (res.statusCode === 200) {
