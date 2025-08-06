@@ -83,6 +83,7 @@
 <script>
 	import settings from '@/common/settings.js';
 import { addUserApi,userApi  } from '../../../api/user';
+import { maskPhone } from '../../../utils/desensitize';
 	export default {
 		data() {
 			return {
@@ -120,8 +121,15 @@ import { addUserApi,userApi  } from '../../../api/user';
 			this.baseUrl = settings.devUrl
 			console.log(options,"bbbbbb")
 			this.fileUrl=uni.getStorageSync("fileUrl");
-			this.UploadcontractId=uni.getStorageSync("UploadcontractId");
-			this.getContractInfo(options.id)
+            this.UploadcontractId = uni.getStorageSync("UploadcontractId");
+            let id = ''
+            if (options.id) {
+                uni.setStorageSync('id', options.id)
+                id = options.id 
+            } else {
+                id = uni.getStorageSync('id')
+            }
+			this.getContractInfo(id)
 			if(this.fileUrl){
 				this.getContractPlaceOnFile()
 			}
@@ -152,7 +160,7 @@ import { addUserApi,userApi  } from '../../../api/user';
 		    const res = await userApi.contractInfo(id)
 		    if (res.code === 200) {
 				this.listData=res?.data
-				this.listData.merchantName=this.listData.merchantName.replace(/^(\d{3})(\d{4})(\d{4})$/, "$1****$3")
+                this.listData.merchantName = maskPhone(this.listData.merchantName)
 		    }
 		 },
 		 async  geTmanuallySign(contractId) {
