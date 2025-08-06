@@ -109,7 +109,7 @@
 <script>
 	import settings from '@/common/settings.js';
 import { addUserApi,userApi  } from '../../../api/user';
-import { maskPhone } from '../../../utils/desensitize';
+import { maskPhone } from '../../../utils/commonUtils';
 	export default {
 		data() {
 			return {

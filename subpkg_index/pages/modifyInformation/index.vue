@@ -83,7 +83,7 @@
 <script>
 	import settings from '@/common/settings.js';
 import { addUserApi,userApi  } from '../../../api/user';
-import { maskPhone, isOnlineFile } from '../../../utils/desensitize';
+import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
 	export default {
 		data() {
 			return {
@@ -196,23 +196,27 @@ import { maskPhone, isOnlineFile } from '../../../utils/desensitize';
 		 },
 		getAddContract() {
 			const parmas={
-				title:this.listData.title,
-				url:this.files.url,
+                ...this.listData,
+				// title:this.listData.title,
+                // url: this.listData.url,
 				merchantId:this.listData.initiator,
 				status:'1',
 				participantsBy:'5',
-				deadline:this.listData.deadline,
+				// deadline:this.listData.deadline,
 				selectedParticipant: this.listData.participantsByName,
-				id:'',
+				// id:'',
 			}
 			userApi.editContract(parmas).then(res => {
 				if (res.code === 200) {
 					
 					uni.showToast({
-						title: '任务创建成功',
+						title: '任务编辑成功',
 						icon: 'success'
 					});
-					// 可以在这里跳转到任务列表页面
+                    // 可以在这里跳转到任务列表页面
+                    setTimeout(() => {
+                        uni.switchTab({url:'/pages/tabbar/index/index'});
+                    }, 1500);
 				} else {
 					uni.showToast({
 						title: res.msg || '创建失败',
