@@ -112,12 +112,19 @@ import { addUserApi,userApi  } from '../../../api/user';
                 listData:{},
                 selectedParticipant: null,
 				baseUrl: '',
+				fileUr:'',
+				contractId:''
 			};
 		},
 		onLoad(options) {
 			this.baseUrl = settings.devUrl
 			console.log(options,"bbbbbb")
+			this.fileUrl=uni.getStorageSync("fileUrl");
+			this.UploadcontractId=uni.getStorageSync("UploadcontractId");
 			this.getContractInfo(options.id)
+			if(this.fileUrl){
+				this.getContractPlaceOnFile()
+			}
 		},
 		created() {
 		},
@@ -126,6 +133,21 @@ import { addUserApi,userApi  } from '../../../api/user';
             // this.getList()
 		},
     methods: {
+		//合同归档
+		async  getContractPlaceOnFile() {
+		   const res = await userApi.contractPlaceOnFile(this.UploadcontractId)
+		   if (res.code === '1000') {
+				this.getContractDownload()
+		   }
+		},
+		//合同下载
+		async  getContractDownload() {
+			console.log(this.UploadcontractId,"sthis.UploadcontractId")
+		   const res = await userApi.contractDownload(this.UploadcontractId)
+		   if (res.code === 200) {
+				this.files.remark=res.result
+		   }
+		},
 		 async  getContractInfo(id) {
 		    const res = await userApi.contractInfo(id)
 		    if (res.code === 200) {
@@ -140,11 +162,11 @@ import { addUserApi,userApi  } from '../../../api/user';
 				title:this.files.remark,
 				signKeyword:'张三',
 				returnUrl:'/subpkg_index/pages/modifyInformation/index',
-				openEnvironment:'4'
 			}
 		    const res = await userApi.manuallySign(parmas)
 		    if (res.code === 200) {
 				console.log(res.result,"res.result")
+				uni.setStorageSync("fileUrl",res.result);
 				uni.navigateTo({
 				  url: '/subpkg_index/pages/webview/index?url=' + encodeURIComponent(res.result)
 				});
@@ -153,6 +175,7 @@ import { addUserApi,userApi  } from '../../../api/user';
 		 async  getContractUpload() {
 		    const res = await userApi.contractUpload({title:this.files.remark,url:`${this.baseUrl}${this.files.url}`})
 		    if (res.code === 200) {
+				uni.setStorageSync("UploadcontractId",res.contractId);
 				this.geTmanuallySign(res.contractId)
 		    }
 		 },

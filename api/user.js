@@ -150,8 +150,8 @@ const userApi = {
 	contractInfo: (id) => safeRequestGet('/mini/getContractInfo/'+ id), //修改牧草信息
 	contractUpload: (data) => safeRequest('/mini/contractUpload',data), //合同上传
 	manuallySign: (data) => safeRequest('/mini/manuallySign', data), //合同签署
-	// userListCg: (id) => safeRequestGet('/mini/userList'),//牧户列表
-	// addUser: (data) => safeRequest('/mini/addUser',data),//新增牧户
+	contractPlaceOnFile: (id) => safeRequestGet('/mini/contractPlaceOnFile/' + id),//合同归档
+	contractDownload: (id) => safeRequestGet('/mini/contractDownload/' + id),//合同下载
 	
 	// getUserInfo: (id) => safeRequestGet('/mini/getUserInfo/' + id), //牧草信息列表
 	
