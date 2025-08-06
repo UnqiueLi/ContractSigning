@@ -101,25 +101,19 @@ var components
 try {
   components = {
     uInput: function () {
-      return Promise.all(/*! import() | uview-ui/components/u-input/u-input */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uview-ui/components/u-input/u-input")]).then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-input/u-input.vue */ 137))
+      return Promise.all(/*! import() | uview-ui/components/u-input/u-input */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uview-ui/components/u-input/u-input")]).then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-input/u-input.vue */ 172))
     },
     uIcon: function () {
-      return __webpack_require__.e(/*! import() | uview-ui/components/u-icon/u-icon */ "uview-ui/components/u-icon/u-icon").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-icon/u-icon.vue */ 130))
+      return __webpack_require__.e(/*! import() | uview-ui/components/u-icon/u-icon */ "uview-ui/components/u-icon/u-icon").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-icon/u-icon.vue */ 165))
     },
     uAvatar: function () {
-      return __webpack_require__.e(/*! import() | uview-ui/components/u-avatar/u-avatar */ "uview-ui/components/u-avatar/u-avatar").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-avatar/u-avatar.vue */ 145))
-    },
-    uRadioGroup: function () {
-      return Promise.all(/*! import() | uview-ui/components/u-radio-group/u-radio-group */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uview-ui/components/u-radio-group/u-radio-group")]).then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-radio-group/u-radio-group.vue */ 152))
-    },
-    uRadio: function () {
-      return __webpack_require__.e(/*! import() | uview-ui/components/u-radio/u-radio */ "uview-ui/components/u-radio/u-radio").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-radio/u-radio.vue */ 159))
+      return __webpack_require__.e(/*! import() | uview-ui/components/u-avatar/u-avatar */ "uview-ui/components/u-avatar/u-avatar").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-avatar/u-avatar.vue */ 180))
     },
     uButton: function () {
-      return __webpack_require__.e(/*! import() | uview-ui/components/u-button/u-button */ "uview-ui/components/u-button/u-button").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-button/u-button.vue */ 166))
+      return __webpack_require__.e(/*! import() | uview-ui/components/u-button/u-button */ "uview-ui/components/u-button/u-button").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-button/u-button.vue */ 187))
     },
     uPicker: function () {
-      return Promise.all(/*! import() | uview-ui/components/u-picker/u-picker */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uview-ui/components/u-picker/u-picker")]).then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-picker/u-picker.vue */ 173))
+      return Promise.all(/*! import() | uview-ui/components/u-picker/u-picker */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uview-ui/components/u-picker/u-picker")]).then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-picker/u-picker.vue */ 194))
     },
   }
 } catch (e) {
@@ -143,11 +137,24 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  var g0 = _vm.files.length
+  var g1 = _vm.listData.length
+  var g2 = _vm.listData.length
   if (!_vm._isMounted) {
     _vm.e0 = function ($event) {
       _vm.showPicker = false
     }
   }
+  _vm.$mp.data = Object.assign(
+    {},
+    {
+      $root: {
+        g0: g0,
+        g1: g1,
+        g2: g2,
+      },
+    }
+  )
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -183,48 +190,16 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {
 
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 43));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 45));
+var _settings = _interopRequireDefault(__webpack_require__(/*! @/common/settings.js */ 66));
+var _user = __webpack_require__(/*! ../../../api/user */ 70);
+var _desensitize = __webpack_require__(/*! ../../../utils/desensitize */ 296);
 //
 //
 //
@@ -343,6 +318,7 @@ var _default = {
         title: '',
         deadline: ''
       },
+      files: [],
       showPicker: false,
       timePickerParams: {
         year: true,
@@ -357,14 +333,292 @@ var _default = {
         border: '1rpx solid #406DFF',
         color: '#406DFF',
         backgroundColor: '#fff'
-      }
+      },
+      listData: [],
+      selectedParticipant: null
     };
   },
-  onLoad: function onLoad() {},
+  onLoad: function onLoad() {
+    var _this = this;
+    this.formData.initiator = (0, _desensitize.maskPhone)(uni.getStorageSync('phoneNumber'));
+    console.log(this.formData.initiator, "this.formData.initiator");
+    // 监听刷新事件
+    uni.$on('refreshUserList', function () {
+      _this.getList();
+    });
+  },
+  onUnload: function onUnload() {
+    // 页面卸载时移除监听
+    uni.$off('refreshUserList');
+  },
   onShow: function onShow() {
     // 页面显示时执行
+    this.getList();
   },
   methods: {
+    // 参与方列表
+    getList: function getList() {
+      var _this2 = this;
+      return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+        var res;
+        return _regenerator.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return _user.addUserApi.list({});
+              case 2:
+                res = _context.sent;
+                if (res.code === 200) {
+                  console.log(res);
+                  _this2.listData = res === null || res === void 0 ? void 0 : res.data;
+                }
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    getContractInfo: function getContractInfo(id) {
+      return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+        var res;
+        return _regenerator.default.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return _user.userApi.contractInfo(id);
+              case 2:
+                res = _context2.sent;
+                if (res.code === 200) {}
+              case 4:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    selectParticipant: function selectParticipant(id) {
+      this.selectedParticipant = id;
+    },
+    delFun: function delFun(id) {
+      var _this3 = this;
+      return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
+        return _regenerator.default.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                uni.showModal({
+                  title: '确认删除',
+                  content: '确定要删除这个参与方吗？',
+                  success: function () {
+                    var _success = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee3(res) {
+                      var result;
+                      return _regenerator.default.wrap(function _callee3$(_context3) {
+                        while (1) {
+                          switch (_context3.prev = _context3.next) {
+                            case 0:
+                              if (!res.confirm) {
+                                _context3.next = 11;
+                                break;
+                              }
+                              _context3.prev = 1;
+                              _context3.next = 4;
+                              return _user.addUserApi.merchantRemove(id);
+                            case 4:
+                              result = _context3.sent;
+                              if (result.code === 200) {
+                                // 如果删除的参与方是当前选中的，清空选择
+                                if (_this3.selectedParticipant === id) {
+                                  _this3.selectedParticipant = null;
+                                }
+                                uni.showToast({
+                                  title: '删除成功',
+                                  icon: 'success'
+                                });
+                                _this3.getList();
+                              } else {
+                                uni.showToast({
+                                  title: result.msg || '删除失败',
+                                  icon: 'none'
+                                });
+                              }
+                              _context3.next = 11;
+                              break;
+                            case 8:
+                              _context3.prev = 8;
+                              _context3.t0 = _context3["catch"](1);
+                              uni.showToast({
+                                title: '删除失败，请重试',
+                                icon: 'none'
+                              });
+                            case 11:
+                            case "end":
+                              return _context3.stop();
+                          }
+                        }
+                      }, _callee3, null, [[1, 8]]);
+                    }));
+                    function success(_x) {
+                      return _success.apply(this, arguments);
+                    }
+                    return success;
+                  }()
+                });
+              case 1:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
+    },
+    getAddContract: function getAddContract() {
+      // 验证必填字段
+      if (!this.formData.title.trim()) {
+        uni.showToast({
+          title: '请输入任务主题',
+          icon: 'none'
+        });
+        return;
+      }
+      if (!this.formData.deadline) {
+        uni.showToast({
+          title: '请选择截止时间',
+          icon: 'none'
+        });
+        return;
+      }
+      if (this.listData.length === 0) {
+        uni.showToast({
+          title: '请至少添加一个参与方',
+          icon: 'none'
+        });
+        return;
+      }
+      if (!this.selectedParticipant) {
+        uni.showToast({
+          title: '请选择一个参与方',
+          icon: 'none'
+        });
+        return;
+      }
+      var parmas = {
+        title: this.formData.title,
+        url: this.files[0].url,
+        merchantId: uni.getStorageSync('userId'),
+        status: '1',
+        participantsBy: this.selectedParticipant,
+        deadline: this.formData.deadline,
+        selectedParticipant: this.selectedParticipant,
+        remark: this.files[0].fileName
+      };
+      _user.userApi.addContract(parmas).then(function (res) {
+        if (res.code === 200) {
+          uni.showToast({
+            title: '任务创建成功',
+            icon: 'success'
+          });
+          // 可以在这里跳转到任务列表页面
+        } else {
+          uni.showToast({
+            title: res.msg || '创建失败',
+            icon: 'none'
+          });
+        }
+      }).catch(function (err) {
+        uni.showToast({
+          title: '创建失败，请重试',
+          icon: 'none'
+        });
+      });
+    },
+    // 触发文件选择
+    triggerFile: function triggerFile() {
+      var _this4 = this;
+      uni.chooseMessageFile({
+        count: 5,
+        type: 'file',
+        success: function success(res) {
+          console.log('选择文件成功:', res);
+          _this4.handleFileSelect(res.tempFiles);
+        },
+        fail: function fail(err) {
+          console.error('选择文件失败:', err);
+          uni.showToast({
+            title: '选择文件失败',
+            icon: 'none'
+          });
+        }
+      });
+    },
+    // 处理文件选择
+    handleFileSelect: function handleFileSelect(tempFiles) {
+      var _this5 = this;
+      tempFiles.forEach(function (file) {
+        _this5.uploadFile(file);
+      });
+    },
+    // 上传文件
+    uploadFile: function uploadFile(file) {
+      var _this6 = this;
+      // 获取基础URL
+      var baseUrl =  true ? _settings.default.devUrl : undefined;
+      // 获取token
+      var token = uni.getStorageSync('token');
+      uni.showLoading({
+        title: '上传中...'
+      });
+      uni.uploadFile({
+        url: baseUrl + '/common/upload',
+        filePath: file.path,
+        name: 'file',
+        header: {
+          'Authorization': 'Bearer ' + token
+        },
+        success: function success(uploadFileRes) {
+          uni.hideLoading();
+          console.log(uploadFileRes.data, "uploadFileResuploadFileRes");
+          var result;
+          try {
+            result = JSON.parse(uploadFileRes.data);
+            if (result.code == 200) {
+              // 将上传成功的文件信息添加到任务表单的files数组
+              _this6.files.push({
+                fileName: file.name,
+                url: result.fileName,
+                fileType: result.fileType
+              });
+              uni.showToast({
+                title: '上传成功',
+                icon: 'success'
+              });
+            } else {
+              uni.showToast({
+                title: result.msg || '上传失败',
+                icon: 'none'
+              });
+            }
+          } catch (error) {
+            console.error('发生错误:', error.message);
+          }
+        },
+        fail: function fail(err) {
+          uni.hideLoading();
+          console.log('上传失败:', err);
+          uni.showToast({
+            title: '上传失败，请重试',
+            icon: 'none'
+          });
+        }
+      });
+    },
+    deleteFile: function deleteFile(index) {
+      this.files.splice(index, 1);
+    },
     addUser: function addUser(id) {
       if (id == 1) {
         uni.navigateTo({

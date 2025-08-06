@@ -1,1 +1,17 @@
 /unpackage/
+unpackage/dist/dev/.sourcemap/mp-weixin/common/main.js.map
+unpackage/dist/dev/.sourcemap/mp-weixin/common/vendor.js.map
+unpackage/dist/dev/mp-weixin/app.json
+unpackage/dist/dev/mp-weixin/project.config.json
+unpackage/dist/dev/mp-weixin/common/vendor.js
+unpackage/dist/dev/mp-weixin/pages/tabbar/create/create.json
+unpackage/dist/dev/mp-weixin/subpkg_create/pages/enterprise/enterprise.json
+unpackage/dist/dev/mp-weixin/subpkg_create/pages/person/person.json
+unpackage/dist/dev/mp-weixin/uview-ui/components/u-avatar/u-avatar.js
+unpackage/dist/dev/mp-weixin/uview-ui/components/u-button/u-button.js
+unpackage/dist/dev/mp-weixin/uview-ui/components/u-icon/u-icon.js
+unpackage/dist/dev/mp-weixin/uview-ui/components/u-input/u-input.js
+unpackage/dist/dev/mp-weixin/uview-ui/components/u-mask/u-mask.js
+unpackage/dist/dev/mp-weixin/uview-ui/components/u-picker/u-picker.js
+unpackage/dist/dev/mp-weixin/uview-ui/components/u-popup/u-popup.js
+unpackage/dist/dev/mp-weixin/uview-ui/components/u-search/u-search.js

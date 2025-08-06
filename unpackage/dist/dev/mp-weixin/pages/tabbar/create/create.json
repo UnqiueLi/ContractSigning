@@ -5,8 +5,6 @@
     "u-input": "/uview-ui/components/u-input/u-input",
     "u-icon": "/uview-ui/components/u-icon/u-icon",
     "u-avatar": "/uview-ui/components/u-avatar/u-avatar",
-    "u-radio-group": "/uview-ui/components/u-radio-group/u-radio-group",
-    "u-radio": "/uview-ui/components/u-radio/u-radio",
     "u-button": "/uview-ui/components/u-button/u-button",
     "u-picker": "/uview-ui/components/u-picker/u-picker"
   }

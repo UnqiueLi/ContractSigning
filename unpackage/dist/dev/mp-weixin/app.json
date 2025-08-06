@@ -6,6 +6,14 @@
   ],
   "subPackages": [
     {
+      "root": "subpkg_index",
+      "pages": [
+        "pages/authentication/index",
+        "pages/webview/index",
+        "pages/modifyInformation/index"
+      ]
+    },
+    {
       "root": "subpkg_create",
       "pages": [
         "pages/person/person",
@@ -15,7 +23,8 @@
     {
       "root": "subpkg_login",
       "pages": [
-        "pages/login/login"
+        "pages/login/login",
+        "pages/forgot-password/forgot-password"
       ]
     }
   ],

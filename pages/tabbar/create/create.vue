@@ -109,6 +109,7 @@
 <script>
 	import settings from '@/common/settings.js';
 import { addUserApi,userApi  } from '../../../api/user';
+import { maskPhone } from '../../../utils/desensitize';
 	export default {
 		data() {
 			return {
@@ -140,7 +141,7 @@ import { addUserApi,userApi  } from '../../../api/user';
 			};
 		},
 		onLoad() {
-				this.formData.initiator=uni.getStorageSync('phoneNumber');
+            this.formData.initiator = maskPhone(uni.getStorageSync('phoneNumber'));
 				console.log(this.formData.initiator,"this.formData.initiator")
 				// 监听刷新事件
 				uni.$on('refreshUserList', () => {

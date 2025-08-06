@@ -31,8 +31,6 @@
   background-color: #fff;
 }
 .form-container.data-v-49cf75a6 {
-  height: calc(100vh - 100rpx);
-  overflow-y: auto;
   padding: 22rpx 32rpx 100rpx;
 }
 .form-item-flex.data-v-49cf75a6 {

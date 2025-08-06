@@ -73,6 +73,21 @@ page {
   margin-bottom: 20rpx;
   box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
 }
+.filesBox {
+  padding: 20rpx 32rpx;
+}
+.fileNameBox text {
+  color: #007AFF;
+  font-size: 26rpx;
+  flex: 1;
+}
+.fileNameBox .delete-icon {
+  width: 32rpx;
+  height: 32rpx;
+  color: #6c757d;
+  cursor: pointer;
+  margin-left: 20rpx;
+}
 .form-item {
   display: flex;
   padding: 0 32rpx;
@@ -129,24 +144,54 @@ page {
   font-size: 28rpx;
   color: #333;
 }
+.participants-subtitle {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 8rpx;
+}
 .participants-list {
   padding: 0 32rpx;
 }
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 0;
+  color: #C0C4CC;
+  font-size: 28rpx;
+}
+.empty-text {
+  margin-top: 20rpx;
+}
 .participant-item {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 16rpx 0;
   border-bottom: 2rpx solid #f5f5f5;
 }
-.participant-item image {
-  width: 30rpx;
-  height: 30rpx;
+.participant-info {
+  display: flex;
+  align-items: center;
+}
+.selection-indicator {
+  margin-right: 20rpx;
+  padding: 10rpx;
+}
+.participant-details {
+  margin-left: 20rpx;
 }
 .participant-name {
-  flex: 1;
-  margin-left: 20rpx;
   font-size: 28rpx;
   color: #333;
+}
+.participant-type {
+  font-size: 24rpx;
+  color: #999;
+}
+.participant-actions {
+  display: flex;
+  align-items: center;
 }
 .participant-icon {
   color: #999;

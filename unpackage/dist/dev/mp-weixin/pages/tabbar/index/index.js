@@ -101,7 +101,7 @@ var components
 try {
   components = {
     uSearch: function () {
-      return __webpack_require__.e(/*! import() | uview-ui/components/u-search/u-search */ "uview-ui/components/u-search/u-search").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-search/u-search.vue */ 123))
+      return __webpack_require__.e(/*! import() | uview-ui/components/u-search/u-search */ "uview-ui/components/u-search/u-search").then(__webpack_require__.bind(null, /*! @/uview-ui/components/u-search/u-search.vue */ 158))
     },
   }
 } catch (e) {
@@ -268,7 +268,6 @@ var _order = __webpack_require__(/*! ../../../api/order.js */ 69);
 //
 //
 //
-//
 var _default = {
   data: function data() {
     return {
@@ -276,7 +275,7 @@ var _default = {
       httpUrl: "",
       keyword: "",
       userAvatar: "/static/image/profilePicture.png",
-      userName: "蓝群子",
+      userName: "",
       sealCount: 0,
       statsData: {
         created: 16,
@@ -306,6 +305,7 @@ var _default = {
     this.getContractList();
     // 获取固定导航的高度
     this.getFixedNavHeight();
+    this.getContractCount();
   },
   onPageScroll: function onPageScroll(e) {
     // 监听页面滚动
@@ -333,63 +333,32 @@ var _default = {
     },
     // 获取用户信息
     getUserInfo: function getUserInfo() {
-      var userInfo = uni.getStorageSync('userInfo');
-      if (userInfo && userInfo !== '') {
-        var _userInfo$user, _userInfo$user2, _userInfo$user3;
-        this.userId = (_userInfo$user = userInfo.user) === null || _userInfo$user === void 0 ? void 0 : _userInfo$user.userId;
-        if ((_userInfo$user2 = userInfo.user) !== null && _userInfo$user2 !== void 0 && _userInfo$user2.avatar) {
-          this.userAvatar = userInfo.user.avatar;
-        }
-        if ((_userInfo$user3 = userInfo.user) !== null && _userInfo$user3 !== void 0 && _userInfo$user3.userName) {
-          this.userName = userInfo.user.userName;
-        }
-      }
+      var _this2 = this;
+      _user.authApi.myInfo().then(function (res) {
+        _this2.userName = res.user.userName;
+        _this2.sealCount = res.user.nickName;
+      });
     },
     // 获取合同列表
     getContractList: function getContractList() {
-      // 这里模拟获取数据，实际项目中应使用真实API
-      // orderApi.getContractList().then(res => {
-      //   this.contractList = res.data
-      // })
-
-      // 模拟数据
-      this.contractList = [{
-        id: '1',
-        title: '租赁服务合同',
-        tags: ['房屋租赁', '设备/物品租赁'],
-        from: '内蒙古某某某科技有限公司'
-      }, {
-        id: '2',
-        title: '虚拟资产交易合同',
-        tags: ['资源买卖', '设备/物品租赁'],
-        from: '内蒙古某某某科技有限公司'
-      }, {
-        id: '3',
-        title: '租赁服务合同',
-        tags: ['房屋租赁', '设备/物品租赁'],
-        from: '内蒙古某某某科技有限公司'
-      }, {
-        id: '4',
-        title: '租赁服务合同',
-        tags: ['房屋租赁', '设备/物品租赁'],
-        from: '内蒙古某某某科技有限公司'
-      }, {
-        id: '5',
-        title: '租赁服务合同',
-        tags: ['房屋租赁', '设备/物品租赁'],
-        from: '内蒙古某某某科技有限公司'
-      }];
+      var _this3 = this;
+      _user.userApi.contractList().then(function (res) {
+        _this3.contractList = res.data;
+      });
     },
     // 查看合同详情
     viewContract: function viewContract(id) {
+      console.log(id, "滴滴滴滴");
       uni.navigateTo({
-        url: '/subpkg_index/pages/contract/detail?id=' + id
+        url: '/subpkg_index/pages/modifyInformation/index?id=' + id
       });
     },
-    // 接口请求示例
-    getList: function getList() {
-      // 轮播图接口
-      _user.userApi.bannerList().then(function (res) {
+    // 统计接口
+    getContractCount: function getContractCount() {
+      var _this4 = this;
+      _user.userApi.contractCount().then(function (res) {
+        _this4.statsData.created = res.data.count;
+        _this4.statsData.completed = res.data.finishNumber;
         console.log(res);
       });
     }
