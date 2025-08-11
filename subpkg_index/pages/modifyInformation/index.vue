@@ -30,7 +30,7 @@
                 </view>
 
                 <!-- 文档上传 -->
-                <view class="form-card">
+                <view class="form-card" v-if="roleId==100">
                     <view class="upload-item">
                         <view class="upload-title">文档上传</view>
                         <view class="upload-btn" @click="triggerFile">
@@ -68,7 +68,7 @@
                 </view>
 
                 <!-- 底部按钮 -->
-                <view class="bottom-actions">
+                <view class="bottom-actions" v-if="roleId==100">
                     <u-button type="primary" class="submit-btn"  @click="getAddContract()">提交任务</u-button>
                 </view>
             </view>
@@ -94,6 +94,7 @@ import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
 					title: '',
 					deadline: ''
 				},
+				roleId:uni.getStorageSync('roleId'),
 				files:{},
 				showPicker: false,
 				timePickerParams: {

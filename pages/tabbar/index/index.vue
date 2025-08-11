@@ -38,28 +38,6 @@
 						<view class="stats-label">我创建的</view>
 					</view>
 					<view class="stats-item">
-						<view class="stats-num">{{statsData.received}}</view>
-						<view class="stats-label">我收到的</view>
-					</view>
-					<view class="stats-item">
-						<view class="stats-num">{{statsData.toReview}}</view>
-						<view class="stats-label">待送审的</view>
-					</view>
-					<view class="stats-item">
-						<view class="stats-num">{{statsData.myPending}}</view>
-						<view class="stats-label">待我方处理</view>
-					</view>
-				</view>
-				<view class="stats-row bottom-row">
-					<view class="stats-item">
-						<view class="stats-num">{{statsData.otherPending}}</view>
-						<view class="stats-label">待他方处理</view>
-					</view>
-					<view class="stats-item">
-						<view class="stats-num">{{statsData.expiring}}</view>
-						<view class="stats-label">即将截止</view>
-					</view>
-					<view class="stats-item">
 						<view class="stats-num">{{statsData.completed}}</view>
 						<view class="stats-label">已审完成</view>
 					</view>
@@ -71,7 +49,7 @@
 		<!-- 最近签署列表 -->
 		<view class="recent-signed">
 			<view class="section-title">最近签署列表</view>
-			<view class="contract-list">
+			<view class="contract-list" v-if="contractList.length>0">
 				<view class="contract-item" v-for="(item, index) in contractList" :key="index">
 					<view class="contract-icon">
 						<image src="/static/image/iconList.png" mode="" style="width: 72rpx;height: 72rpx;"></image>
@@ -88,7 +66,11 @@
 					</view>
 				</view>
 			</view>
+			<view class="" style="text-align: center;" v-else>
+				<text>暂无数据</text>
+			</view>
 		</view>
+		
 	</view>
 </template>
 
@@ -139,6 +121,12 @@
 			this.getFixedNavHeight()
 			this.getContractCount()
 			this.httpUrl = settings.devUrl
+		},
+		onShow() {
+			uni.setTabBarItem({
+			  index: 1 ,// “创建”菜单在 list 中的索引，从 0 开始
+			  visible: false,
+			});
 		},
 		onPageScroll(e) {
 			// 监听页面滚动

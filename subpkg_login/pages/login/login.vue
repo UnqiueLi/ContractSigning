@@ -38,7 +38,7 @@
 			return {
 				selectedContract: '',
 				isAgree: false,
-				phoneNumber:'15794119711'
+				phoneNumber:'15540996166'
 			}
 		},
 		methods: {
@@ -152,7 +152,7 @@
 									iv: e.target.iv,
 								}
 								authApi.decryptPhone(parmas).then(res => {
-									this.phoneNumber="15794119711"
+									this.phoneNumber="15540996166"
 									uni.setStorageSync('phoneNumber',this.phoneNumber);
 									this.getMyLogin()
 								})
@@ -173,17 +173,25 @@
 					 	icon: 'success'
 					 });
 					 this.getMyInfo()
-					 setTimeout(() => {
-					 	uni.switchTab({
-					 		url: '/pages/tabbar/index/index'
-					 	});
-					 }, 1500);
 				}
 			})
 		},
 		getMyInfo(){
 			authApi.myInfo().then(res => {
+				console.log(res.user.roles[0].roleId,"res.user.roles[0].roleId")
+				 if (res.user.roles[0].roleId==100) { 
+				    uni.setTabBarItem({
+				      index: 1 ,// “创建”菜单在 list 中的索引，从 0 开始
+					  visible: false,
+				    });
+				  } 
 				uni.setStorageSync('userId',res.user.userId);
+				uni.setStorageSync('roleId',res.user.roles[0].roleId);
+				setTimeout(() => {
+					uni.switchTab({
+						url: '/pages/tabbar/index/index'
+					});
+				}, 1500);
 			})
 		},
 		// 原登录方法，已由getPhoneNumber替代

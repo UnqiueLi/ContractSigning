@@ -141,6 +141,7 @@ import { maskPhone } from '../../../utils/commonUtils';
 			};
 		},
 		onLoad() {
+			this.files=[]
             this.formData.initiator = maskPhone(uni.getStorageSync('phoneNumber'));
 				console.log(this.formData.initiator,"this.formData.initiator")
 				// 监听刷新事件
@@ -242,7 +243,13 @@ import { maskPhone } from '../../../utils/commonUtils';
 				});
 				return;
 			}
-			
+			if (this.files.length==0) {
+				uni.showToast({
+					title: '请上传合同',
+					icon: 'none'
+				});
+				return;
+			}
 			const parmas={
 				title:this.formData.title,
 				url:this.files[0].url,
@@ -259,6 +266,11 @@ import { maskPhone } from '../../../utils/commonUtils';
 						title: '任务创建成功',
 						icon: 'success'
 					});
+					setTimeout(()=>{
+						uni.reLaunch({
+							url:"/pages/tabbar/index/index"
+						},1500)
+					})
 					// 可以在这里跳转到任务列表页面
 				} else {
 					uni.showToast({

@@ -14,7 +14,8 @@
 					<image class="avatar-img" src="/static/image/bg-header.png" mode=""></image>
 				</view>
 				<view class="login-info">
-					<view class="login-title">登录</view>
+					<view class="login-title" v-if="isLoggedIn">{{userName}}</view>
+					<view class="login-title" v-else>登录</view>
 					<view class="login-subtitle">Hi,欢迎加入体验更多功能</view>
 				</view>
 			</view>
@@ -44,11 +45,13 @@
 	export default {
 		data() {
 			return {
-				isLoggedIn: false
+				isLoggedIn: false,
+				userName:''
 			};
 		},
 		onLoad() {
 			// 检查登录状态
+			this.userName=uni.getStorageSync('phoneNumber');
 			this.checkLoginStatus();
 		},
 		onShow() {
@@ -86,7 +89,6 @@
 					this.goToLogin();
 					return;
 				}
-
 				uni.showModal({
 					title: '提示',
 					content: '确定要退出登录吗？',
@@ -96,11 +98,11 @@
 							uni.removeStorageSync('token');
 							uni.removeStorageSync('userInfo');
 							this.isLoggedIn = false;
-
 							uni.showToast({
 								title: '已退出登录',
 								icon: 'none'
 							});
+							this.goToLogin()
 						}
 					}
 				});
