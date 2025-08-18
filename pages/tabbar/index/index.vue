@@ -81,7 +81,7 @@
 			</u-popup>
 		</view>
 		<!-- 自定义底部导航栏 -->
-		<v-bottom-menu :active="currentTab"></v-bottom-menu>
+		<v-bottom-menu :active="currentTab" :hideCreate="hideCreate"></v-bottom-menu>
 	</view>
 </template>
 
@@ -125,7 +125,8 @@
 				navFixedThreshold: 50,
 				showPopup: false,
 				sign:uni.getStorageSync('sign'),
-				currentTab: 'index'
+				currentTab: 'index',
+				hideCreate: false
 			}
 		},
 		onLoad() {
@@ -176,6 +177,17 @@
 					this.userName=res.user.userName
 					this.sealCount=res.user.nickName
 					uni.setStorageSync('sign',res.sign)
+					
+					// 存储用户信息到本地存储，供其他页面使用
+					uni.setStorageSync('userInfo', res.user)
+                    console.log(res.user.roleId,'res.user.roleId')	
+					// 根据角色ID控制创建菜单的显示
+					if (res.user.roleId == 100) {
+						this.hideCreate = true
+					} else {
+						this.hideCreate = false
+					}
+					
 					if(res.sign==0){
 						console.log(this.sign,"this.sign")
 						this.showPopup=true

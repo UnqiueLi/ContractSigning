@@ -4,7 +4,7 @@
 			<image class="tab-icon" :src="active === 'index' ? '/static/tabbar/home-active.png' : '/static/tabbar/home.png'"></image>
 			<text class="tab-text">首页</text>
 		</view>
-		<view class="tab-item" :class="{'active': active === 'create', 'loading': isLoading}" @click="switchTab('create')">
+		<view class="tab-item" v-if="!hideCreate" :class="{'active': active === 'create', 'loading': isLoading}" @click="switchTab('create')">
 			<image class="tab-icon" :src="active === 'create' ? '/static/tabbar/create-active.png' : '/static/tabbar/create.png'"></image>
 			<text class="tab-text">创建</text>
 		</view>
@@ -30,6 +30,10 @@
 			badgeText: {
 				type: String,
 				default: ''
+			},
+			hideCreate: {
+				type: Boolean,
+				default: false
 			}
 		},
 		data() {
@@ -41,6 +45,15 @@
 			active: {
 				handler(newVal, oldVal) {
 					console.log(`底部导航切换: ${oldVal} -> ${newVal}`);
+				},
+				immediate: true
+			},
+			hideCreate: {
+				handler(newVal) {
+					// 如果隐藏创建菜单且当前在创建页面，自动跳转到首页
+					if (newVal && this.active === 'create') {
+						this.switchTab('index');
+					}
 				},
 				immediate: true
 			}

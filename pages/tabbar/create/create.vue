@@ -102,7 +102,7 @@
         </view>
 
         <!-- 自定义底部导航栏 -->
-        <v-bottom-menu :active="currentTab"></v-bottom-menu>
+        <v-bottom-menu :active="currentTab" :hideCreate="hideCreate"></v-bottom-menu>
 
         <!-- 时间选择器 -->
         <u-picker v-model="showPicker" mode="time" :params="timePickerParams" :show-time-tag="true"
@@ -144,12 +144,17 @@ import { maskPhone } from '../../../utils/commonUtils';
                 selectedParticipant: null,
 				contractId:'',
 				currentTab: 'create',
+				hideCreate: false,
 			};
 		},
 		onLoad() {
 			this.files=[]
             this.formData.initiator = maskPhone(uni.getStorageSync('phoneNumber'));
 				console.log(this.formData.initiator,"this.formData.initiator")
+				
+				// 获取用户角色信息，控制创建菜单显示
+				this.getUserRole()
+				
 				// 监听刷新事件
 				uni.$on('refreshUserList', () => {
 				    this.getList();
@@ -164,6 +169,17 @@ import { maskPhone } from '../../../utils/commonUtils';
             this.getList()
 		},
     methods: {
+		// 获取用户角色信息
+		getUserRole() {
+			// 从首页获取用户角色信息，或者从本地存储获取
+			const userInfo = uni.getStorageSync('userInfo')
+			if (userInfo && userInfo.roleId === 100) {
+				this.hideCreate = true
+			} else {
+				this.hideCreate = false
+			}
+		},
+		
 		// goSign(){
 		//   this.getContractUpload()
 		// },

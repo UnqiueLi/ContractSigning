@@ -41,7 +41,7 @@
 		</view>
 
 		<!-- 自定义底部导航栏 -->
-		<v-bottom-menu :active="currentTab"></v-bottom-menu>
+		<v-bottom-menu :active="currentTab" :hideCreate="hideCreate"></v-bottom-menu>
 	</view>
 </template>
 
@@ -53,18 +53,32 @@
 				userName:'',
 				sign:uni.getStorageSync("sign"),
 				currentTab: 'user',
+				hideCreate: false,
 			};
 		},
 		onLoad() {
 			// 检查登录状态
 			this.userName=uni.getStorageSync('phoneNumber');
 			this.checkLoginStatus();
+			
+			// 获取用户角色信息，控制创建菜单显示
+			this.getUserRole();
 		},
 		onShow() {
 			// 页面显示时重新检查登录状态
 			this.checkLoginStatus();
 		},
 		methods: {
+			// 获取用户角色信息
+			getUserRole() {
+				const userInfo = uni.getStorageSync('userInfo')
+				if (userInfo && userInfo.roleId === 100) {
+					this.hideCreate = true
+				} else {
+					this.hideCreate = false
+				}
+			},
+			
 			// 检查登录状态
 			checkLoginStatus() {
 				const token = uni.getStorageSync('token');
