@@ -101,6 +101,9 @@
             </view>
         </view>
 
+        <!-- 自定义底部导航栏 -->
+        <v-bottom-menu :active="currentTab"></v-bottom-menu>
+
         <!-- 时间选择器 -->
         <u-picker v-model="showPicker" mode="time" :params="timePickerParams" :show-time-tag="true"
             @confirm="onTimeConfirm" @cancel="showPicker = false"></u-picker>
@@ -140,6 +143,7 @@ import { maskPhone } from '../../../utils/commonUtils';
                 listData:[],
                 selectedParticipant: null,
 				contractId:'',
+				currentTab: 'create',
 			};
 		},
 		onLoad() {
@@ -463,7 +467,7 @@ import { maskPhone } from '../../../utils/commonUtils';
 	
 	.page-container {
 		padding-top: calc(var(--status-bar-height) + 120rpx); /* 为顶部导航栏留出空间 */
-		padding-bottom: 40rpx; /* 为底部导航留出空间 */
+		padding-bottom: 188rpx; /* 为自定义底部导航留出空间 */
 		min-height: calc(100vh - 140rpx);
 	}
 	

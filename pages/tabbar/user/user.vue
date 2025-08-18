@@ -39,6 +39,9 @@
 				<button class="logout-btn" @click="logout">退出登录</button>
 			</view>
 		</view>
+
+		<!-- 自定义底部导航栏 -->
+		<v-bottom-menu :active="currentTab"></v-bottom-menu>
 	</view>
 </template>
 
@@ -49,6 +52,7 @@
 				isLoggedIn: false,
 				userName:'',
 				sign:uni.getStorageSync("sign"),
+				currentTab: 'user',
 			};
 		},
 		onLoad() {
@@ -132,6 +136,7 @@
 
 	.page-container {
 		padding-top: var(--status-bar-height);
+		padding-bottom: 188rpx; /* 为自定义底部导航留出空间 */
 	}
 
 	.top-nav {
@@ -239,7 +244,7 @@
 	.logout-btn-wrap {
 		padding: 0 30rpx;
 		position: fixed;
-		bottom: 100rpx;
+		bottom: 220rpx; /* 调整位置，避免被自定义底部导航遮挡 */
 		left: 0;
 		width: 100%;
 		box-sizing: border-box;

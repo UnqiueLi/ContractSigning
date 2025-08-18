@@ -110,6 +110,7 @@
     "selectedColor": "#5570F1",
     "borderStyle": "white",
     "backgroundColor": "#fff",
+    "custom": true,
     "list": [
       {
         "pagePath": "pages/tabbar/index/index",

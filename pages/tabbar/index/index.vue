@@ -81,7 +81,7 @@
 			</u-popup>
 		</view>
 		<!-- 自定义底部导航栏 -->
-		<!-- <v-bottom-menu :active="currentTab"></v-bottom-menu> -->
+		<v-bottom-menu :active="currentTab"></v-bottom-menu>
 	</view>
 </template>
 
@@ -124,7 +124,8 @@
 				scrollTop: 0,
 				navFixedThreshold: 50,
 				showPopup: false,
-				sign:uni.getStorageSync('sign')
+				sign:uni.getStorageSync('sign'),
+				currentTab: 'index'
 			}
 		},
 		onLoad() {
@@ -137,10 +138,7 @@
 			this.httpUrl = settings.devUrl
 		},
 		onShow() {
-			uni.setTabBarItem({
-			  index: 1 ,// “创建”菜单在 list 中的索引，从 0 开始
-			  visible: false,
-			});
+			// 使用自定义底部导航，不需要隐藏系统tabbar
 		},
 		onPageScroll(e) {
 			// 监听页面滚动
@@ -260,6 +258,7 @@
 		min-height: 100vh;
 		position: relative;
 		z-index: 1;
+		padding-bottom: 188rpx; /* 为自定义底部导航留出空间 */
 	}
 
 	.top-menu {
