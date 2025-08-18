@@ -32,9 +32,9 @@
                 <!-- 文档上传 -->
                 <view class="form-card" v-if="roleId==100">
                     <view class="upload-item">
-                        <view class="upload-title">文档上传</view>
-                        <view class="upload-btn" @click="triggerFile">
-                            <view class="custom-upload-btn">添加文档</view>
+                        <view class="upload-title">合同签署</view>
+                        <view class="upload-btn" @click="goSign">
+                            <view class="custom-upload-btn">签署</view>
                         </view>
                     </view>
                 </view>
@@ -68,8 +68,9 @@
                 </view>
 
                 <!-- 底部按钮 -->
-                <view class="bottom-actions" v-if="roleId==100">
-                    <u-button type="primary" class="submit-btn"  @click="getAddContract()">提交任务</u-button>
+                <view class="bottom-actions">
+                    <u-button type="primary" class="submit-btn"  @click="getAddContract()" v-if="roleId==100">提交任务</u-button>
+					<u-button type="primary" class="submit-btn"  @click="goSign()" v-else >签署合同</u-button>
                 </view>
             </view>
         </view>
@@ -129,8 +130,10 @@ import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
                 id = options.id 
                 this.getContractInfo(id)
             } else {
-                this.listData = JSON.parse(uni.getStorageSync('listDataPrev'))
-                this.getContractPlaceOnFile()
+				if(this.roleId=='100'){
+					this.listData = JSON.parse(uni.getStorageSync('listDataPrev'))
+					this.getContractPlaceOnFile()
+				}
             }
 		
             
@@ -145,6 +148,9 @@ import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
             // this.getList()
 		},
     methods: {
+		goSign(){
+		  this.getContractUpload()
+		},
 		//合同归档
 		async  getContractPlaceOnFile() {
 		   const res = await userApi.contractPlaceOnFile(this.UploadcontractId)
@@ -168,13 +174,14 @@ import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
 		    if (res.code === 200) {
 				this.listData=res?.data
                 this.listData.merchantName = maskPhone(this.listData.merchantName)
+				console.log(this.listData,"this.listData")
 		    }
 		 },
 		 async  geTmanuallySign(contractId) {
 			const parmas={
 				contractId:contractId,
 				customerId:uni.getStorageSync("contractId"),
-				title:this.files.remark,
+				title:this.listData.title,
 				signKeyword:'张三',
 				returnUrl:'/subpkg_index/pages/modifyInformation/index',
 			}
@@ -189,7 +196,7 @@ import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
 		    }
 		 },
 		 async  getContractUpload() {
-		    const res = await userApi.contractUpload({title:this.files.remark,url:`${this.baseUrl}${this.files.url}`})
+		    const res = await userApi.contractUpload({title:this.listData.remark,url:`${this.baseUrl}${this.listData.url}`})
 		    if (res.code === 200) {
 				uni.setStorageSync("UploadcontractId",res.contractId);
 				this.geTmanuallySign(res.contractId)
@@ -211,7 +218,7 @@ import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
 				if (res.code === 200) {
 					
 					uni.showToast({
-						title: '任务编辑成功',
+						title: '合同签署成功',
 						icon: 'success'
 					});
                     // 可以在这里跳转到任务列表页面
@@ -334,7 +341,7 @@ import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
                                 };
                                 this.listData = { ...this.listData,...this.files}
 								console.log(this.files,"this.files.files")
-								this.getContractUpload()
+								// this.getContractUpload()
 								uni.showToast({
 									title: '上传成功',
 									icon: 'success'

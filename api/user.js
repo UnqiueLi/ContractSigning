@@ -153,6 +153,8 @@ const userApi = {
 	contractPlaceOnFile: (id) => safeRequestGet('/mini/contractPlaceOnFile/' + id),//合同归档
 	contractDownload: (id) => safeRequestGet('/mini/contractDownload/' + id),//合同下载
 	editContract: (data) => safeRequest('/mini/editContract',data), //修改合同提交
+	saveCustomerId: (data) => safeRequest('/mini/saveCustomerId',data), //保存客户id
+	editMerchant: (phone) => safeRequestGet('/mini/editMerchant/'+ phone), //保存客户认证状态
 	
 	
 	

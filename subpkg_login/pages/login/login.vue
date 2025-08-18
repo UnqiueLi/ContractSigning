@@ -38,7 +38,7 @@
 			return {
 				selectedContract: '',
 				isAgree: false,
-				phoneNumber:'15540996166'
+				phoneNumber:''
 			}
 		},
 		methods: {
@@ -100,6 +100,10 @@
 					success: async (loginRes) => {
 						if (loginRes.code) {
 							try {
+								uni.showToast({
+									title:loginRes.code,
+									icon: 'success'
+								});
 								// 将code和加密的手机号信息发送到后端
 								const res = await authApi.wxLogin({
 									code: loginRes.code,
@@ -152,9 +156,16 @@
 									iv: e.target.iv,
 								}
 								authApi.decryptPhone(parmas).then(res => {
-									this.phoneNumber="15540996166"
-									uni.setStorageSync('phoneNumber',this.phoneNumber);
-									this.getMyLogin()
+									this.phoneNumber="15794119711"
+									// this.phoneNumber="15794119711"
+									if(res){
+										console.log(res,':ressss')
+										// this.phoneNumber=res.phone
+										// uni.setStorageSync('phoneNumber',res.phone);
+										uni.setStorageSync('phoneNumber','15794119711');
+										this.getMyLogin()
+									}
+									
 								})
 							}
 						}
@@ -162,6 +173,7 @@
 
 		},
 		getMyLogin(){
+			console.log(this.phoneNumber,"909090909")
 			authApi.myLogin({phone:this.phoneNumber}).then(res => {
 				console.log(res,"resresres111")
 				if(res.code===200 && res.token){
@@ -187,8 +199,9 @@
 				  } 
 				uni.setStorageSync('userId',res.user.userId);
 				uni.setStorageSync('roleId',res.user.roles[0].roleId);
+				uni.setStorageSync('sign',res.sign)
 				setTimeout(() => {
-					uni.switchTab({
+					uni.reLaunch({
 						url: '/pages/tabbar/index/index'
 					});
 				}, 1500);
@@ -217,11 +230,10 @@
 
 							// 登录成功，跳转到首页
 							setTimeout(() => {
-								uni.switchTab({
+								uni.reLaunch({
 									url: '/pages/tabbar/index/index'
 								});
 							}, 1500);
-							return
 							const res = await authApi.wxLogin({
 								code: loginRes.code,
 								contractType: this.selectedContract
@@ -238,7 +250,7 @@
 
 								// 登录成功，跳转到首页
 								setTimeout(() => {
-									uni.switchTab({
+									uni.reLaunch({
 										url: '/pages/tabbar/index/index'
 									});
 								}, 1500);

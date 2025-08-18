@@ -109,6 +109,8 @@
 				showModal:false,
 				content:'',
 				verifiedSerialNo:'',
+				userId:'',
+				customerId:''
 				
 			}
 		},
@@ -124,8 +126,8 @@
 		},
 		created() {
 			this.phoneNumber=uni.getStorageSync('phoneNumber');
+			this.userId=uni.getStorageSync('userId');
 			this.verifiedSerialNo=uni.getStorageSync("verifiedSerialNo");
-			console.log(this.verifiedSerialNo,"this.verifiedSerialNo")
 			if(this.verifiedSerialNo){
 				this.getBindRealName()
 			}
@@ -133,23 +135,40 @@
 		methods: {
 			getRegister(){
 				userApi.register({type:'1'}).then(res => {
+					this.customerId=res.data
 					uni.setStorageSync("contractId",res.data);
-					this.getCertificate(res.data)
+					console.log(this.customerId,"this.customerId")
+					this.getSaveCustomerId(res.data)
 				})
 			},
 			getBindRealName(){
 				userApi.bindRealName({customerId:uni.getStorageSync("contractId"),verifiedSerialNo:this.verifiedSerialNo}).then(res => {
-					if(res.code===3205){
+					if(res.code===3205||res.code===1004){
 						this.content=res.msg
+						uni.removeStorageSync("verifiedSerialNo")
 					}else if(res.code===1){
+						this.getEditMerchant()
 						this.content="恭喜您实名认证成功"
+						uni.navigateTo({
+							url:'/pages/tabbar/index/index'
+						})
 					}
 					this.showModal=true
 				})
 			},
-			getCertificate(code){
+			getSaveCustomerId(customerId){
+				userApi.saveCustomerId({customerId:customerId,userId:this.userId}).then(res => {
+					this.getCertificate(customerId)
+				})
+			},
+			getEditMerchant(){
+				userApi.editMerchant(this.phoneNumber).then(res => {
+					uni.removeStorageSync("verifiedSerialNo")
+				})
+			},
+			getCertificate(customerId){
 				const parmas={
-					customerId:code,
+					customerId:customerId,
 					verifiedWay:'4',
 					pageModify:'1',
 					customerName:this.userName,

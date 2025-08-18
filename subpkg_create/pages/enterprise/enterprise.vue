@@ -41,8 +41,8 @@ export default {
     return {
       formData: {
         name: '',
-            mobile: '',
-            companyCode:''
+		mobile: '',
+		companyCode:''
       },
     }
   },
@@ -51,6 +51,27 @@ export default {
       uni.navigateBack();
     },
     onSubmit() {
+		if (this.formData.name === '') {
+			uni.showToast({
+				title: '请输入姓名',
+				icon: 'none'
+			});
+			return;
+		}
+		if (this.formData.mobile === '') {
+			uni.showToast({
+				title: '请输入手机号',
+				icon: 'none'
+			});
+			return;
+		}
+		if (this.formData.companyCode === '') {
+			uni.showToast({
+				title: '请输入企业社会信息代码',
+				icon: 'none'
+			});
+			return;
+		}
         this.$refs.uForm.validate(async (valid) => {
             if (valid) {
                 try {

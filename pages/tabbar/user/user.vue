@@ -22,12 +22,13 @@
 
 			<!-- 菜单列表 -->
 			<view class="menu-list">
-				<view class="menu-item" @click="goToAuthentication">
+				<view class="menu-item"  @click="sign == 0 ? goToAuthentication() : () => {}">
 					<view class="menu-left">
 						<image src="/static/image/icon2.png" mode="aspectFit" class="menu-icon blue-icon"></image>
 						<text class="menu-title">实名认证</text>
 					</view>
 					<view class="menu-right">
+						<text class="menu-title" style="color: #FFC107;" v-if="sign==1">已认证</text>
 						<u-icon name="arrow-right" color="#c0c4cc"></u-icon>
 					</view>
 				</view>
@@ -46,7 +47,8 @@
 		data() {
 			return {
 				isLoggedIn: false,
-				userName:''
+				userName:'',
+				sign:uni.getStorageSync("sign"),
 			};
 		},
 		onLoad() {

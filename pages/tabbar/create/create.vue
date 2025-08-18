@@ -38,8 +38,9 @@
                 <view class="form-card">
                     <view class="upload-item">
                         <view class="upload-title">文档上传</view>
-                        <view class="upload-btn" @click="triggerFile">
-                            <view class="custom-upload-btn">添加文档</view>
+                        <view class="upload-btn">
+                            <view class="custom-upload-btn" @click="triggerFile">添加文档</view>
+							<!-- <view class="custom-upload-btn" v-else @click="goSign()">签署</view> -->
                         </view>
                     </view>
                 </view>
@@ -137,7 +138,8 @@ import { maskPhone } from '../../../utils/commonUtils';
 					backgroundColor: '#fff'
                 },
                 listData:[],
-                selectedParticipant: null
+                selectedParticipant: null,
+				contractId:'',
 			};
 		},
 		onLoad() {
@@ -158,6 +160,9 @@ import { maskPhone } from '../../../utils/commonUtils';
             this.getList()
 		},
     methods: {
+		// goSign(){
+		//   this.getContractUpload()
+		// },
         // 参与方列表
 
          async  getList() {
@@ -167,10 +172,30 @@ import { maskPhone } from '../../../utils/commonUtils';
                 this.listData=res?.data
             }
          },
-		 async  getContractInfo(id) {
-		    const res = await userApi.contractInfo(id)
+		 // async  getContractUpload() {
+		 //    const res = await userApi.contractUpload({title:this.listData.remark,url:`${this.baseUrl}${this.listData.url}`})
+			// console.log(res.code,"res.coderes.code")
+		 //    if (res.code === 200) {
+			// 	this.geTmanuallySign(res.contractId)
+		 // 		uni.setStorageSync("UploadcontractId",res.contractId);
+		 //    }
+		 // },
+		 async  geTmanuallySign(contractId) {
+		 			const parmas={
+		 				contractId:contractId,
+		 				customerId:uni.getStorageSync("contractId"),
+		 				title:this.files[0].fileName,
+		 				signKeyword:'张三',
+		 				returnUrl:'/pages/tabbar/create/create',
+		 			}
+		    const res = await userApi.manuallySign(parmas)
 		    if (res.code === 200) {
-		   
+		 				console.log(res.result,"res.result")
+		        uni.setStorageSync("fileUrl", res.result);
+		        uni.setStorageSync('listDataPrev', JSON.stringify(this.listData))
+		 				uni.navigateTo({
+		 				  url: '/subpkg_index/pages/webview/index?url=' + encodeURIComponent(res.result)
+		 				});
 		    }
 		 },
         selectParticipant(id) {
@@ -258,7 +283,8 @@ import { maskPhone } from '../../../utils/commonUtils';
 				participantsBy:this.selectedParticipant,
 				deadline:this.formData.deadline,
 				selectedParticipant: this.selectedParticipant,
-				remark:this.files[0].fileName
+				remark:this.files[0].fileName,
+				contractId:this.contractId,
 			}
 			userApi.addContract(parmas).then(res => {
 				if (res.code === 200) {
@@ -353,6 +379,10 @@ import { maskPhone } from '../../../utils/commonUtils';
 									url: result.fileName,
 									fileType:result.fileType
 								});
+								if(this.files.length>0){
+									this.getContractUpload()
+								}
+								console.log(this.files,"this.filesthis.files")
 								uni.showToast({
 									title: '上传成功',
 									icon: 'success'
@@ -379,6 +409,16 @@ import { maskPhone } from '../../../utils/commonUtils';
 			},
 			deleteFile(index) {
 				this.files.splice(index, 1);
+			},
+			async  getContractUpload() {
+				const baseUrl = process.env.NODE_ENV === 'development' ?
+					settings.devUrl : settings.prodUrl;
+				console.log(this.files,"this.filesthis.files")
+			   const res = await userApi.contractUpload({title:this.files[0].fileName,url:`${baseUrl}${this.files[0].url}`})
+			   if (res.code === 200) {
+				   this.contractId=res.contractId
+				   // this.geTmanuallySign(res.contractId)
+			   }
 			},
 			addUser(id){
 				if(id == 1){

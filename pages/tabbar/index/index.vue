@@ -34,11 +34,13 @@
 			<view class="stats-box">
 				<view class="stats-row top-row">
 					<view class="stats-item">
-						<view class="stats-num">{{statsData.created}}</view>
+						<view class="stats-num" v-if="statsData.created">{{statsData.created}}</view>
+						<view class="stats-num" v-else>0</view>
 						<view class="stats-label">我创建的</view>
 					</view>
 					<view class="stats-item">
-						<view class="stats-num">{{statsData.completed}}</view>
+						<view class="stats-num" v-if="statsData.completed">{{statsData.completed}}</view>
+						<view class="stats-num" v-else>0</view>
 						<view class="stats-label">已审完成</view>
 					</view>
 					<view class="stats-item"></view> <!-- 空占位 -->
@@ -70,7 +72,16 @@
 				<text>暂无数据</text>
 			</view>
 		</view>
-		
+		<view>
+			<u-popup v-model="showPopup" mode="center" border-radius="14" mask-close-able='false'>
+				<view class="" style="padding: 60rpx 60rpx; text-align: center;">
+					<view style="margin-bottom: 60rpx;font-size: 40rpx;" >请先进行实名认证</view>
+					<u-button type="primary" @click="goAuth">去认证</u-button>
+				</view>
+			</u-popup>
+		</view>
+		<!-- 自定义底部导航栏 -->
+		<!-- <v-bottom-menu :active="currentTab"></v-bottom-menu> -->
 	</view>
 </template>
 
@@ -93,13 +104,13 @@
 				userName: "",
 				sealCount: 0,
 				statsData: {
-					created: 16,
+					created: 0,
 					received: 2,
 					toReview: 2,
 					myPending: 6,
 					otherPending: 0,
 					expiring: 0,
-					completed: 28
+					completed: 0
 				},
 				contractList: [],
 				pageStyle: {
@@ -111,12 +122,15 @@
 				isNavFixed: false,
 				fixedNavHeight: 0,
 				scrollTop: 0,
-				navFixedThreshold: 50
+				navFixedThreshold: 50,
+				showPopup: false,
+				sign:uni.getStorageSync('sign')
 			}
 		},
-		created() {
+		onLoad() {
 			this.getUserInfo()
-			this.getContractList()
+			console.log(this.sign,"this.sign111")
+			
 			// 获取固定导航的高度
 			this.getFixedNavHeight()
 			this.getContractCount()
@@ -134,6 +148,11 @@
 			this.checkNavFixed()
 		},
 		methods: {
+			goAuth(){
+				uni.navigateTo({
+					url:'/subpkg_index/pages/authentication/index'
+				})
+			},
 			// 检查导航栏是否需要固定
 			checkNavFixed() {
 				if (this.scrollTop > this.navFixedThreshold && !this.isNavFixed) {
@@ -158,6 +177,13 @@
 				authApi.myInfo().then(res => {
 					this.userName=res.user.userName
 					this.sealCount=res.user.nickName
+					uni.setStorageSync('sign',res.sign)
+					if(res.sign==0){
+						console.log(this.sign,"this.sign")
+						this.showPopup=true
+					}
+					this.getContractList()
+					console.log(res,"resres")
 				})
 			},
 
