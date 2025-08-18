@@ -12,6 +12,12 @@
                             <u-input v-model="listData.merchantName" placeholder="请输入发起方" disabled/>
                         </view>
                     </view>
+					<view class="form-item">
+					    <view class="form-item-label">签署姓名</view>
+					    <view class="form-item-input">
+					        <u-input v-model="listData.signName" placeholder="请输入签署姓名"/>
+					    </view>
+					</view>
                     <view class="form-line"></view>
                     <view class="form-item">
                         <view class="form-item-label">主题</view>
@@ -69,8 +75,8 @@
 
                 <!-- 底部按钮 -->
                 <view class="bottom-actions">
-                    <u-button type="primary" class="submit-btn"  @click="getAddContract()" v-if="roleId==100">提交任务</u-button>
-					<u-button type="primary" class="submit-btn"  @click="goSign()" v-else >签署合同</u-button>
+                    <!-- <u-button type="primary" class="submit-btn"  @click="getAddContract()" v-if="roleId==100">提交任务</u-button> -->
+					<u-button type="primary" class="submit-btn"  @click="goSign()" v-if="roleId==101" >签署合同</u-button>
                 </view>
             </view>
         </view>
@@ -166,6 +172,7 @@ import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
 				// this.files.remark=res.result
                console.log(res.result,'res.result')
                this.listData = { ...this.listData, url:res.result }
+			   this.getAddContract()
                console.log(this.listData,'this.listData ')
 		   }
 		},
@@ -182,7 +189,7 @@ import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
 				contractId:contractId,
 				customerId:uni.getStorageSync("contractId"),
 				title:this.listData.title,
-				signKeyword:'张三',
+				signKeyword:this.listData.signName,
 				returnUrl:'/subpkg_index/pages/modifyInformation/index',
 			}
 		    const res = await userApi.manuallySign(parmas)
@@ -206,10 +213,10 @@ import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
 			const parmas={
                 ...this.listData,
 				// title:this.listData.title,
-                // url: this.listData.url,
+                // contractId: this.listData.url,
 				merchantId:this.listData.initiator,
 				status:'1',
-				participantsBy:'5',
+				participantsBy:this.listData.participantsBy,
 				// deadline:this.listData.deadline,
 				selectedParticipant: this.listData.participantsByName,
 				// id:'',

@@ -182,7 +182,7 @@
 					uni.setStorageSync('userInfo', res.user)
                     console.log(res.user.roleId,'res.user.roleId')	
 					// 根据角色ID控制创建菜单的显示
-					if (res.user.roleId == 100) {
+					if (res.user.roles[0].roleId == 100) {
 						this.hideCreate = true
 					} else {
 						this.hideCreate = false
