@@ -100,10 +100,6 @@
 					success: async (loginRes) => {
 						if (loginRes.code) {
 							try {
-								uni.showToast({
-									title:loginRes.code,
-									icon: 'success'
-								});
 								// 将code和加密的手机号信息发送到后端
 								const res = await authApi.wxLogin({
 									code: loginRes.code,
@@ -156,13 +152,14 @@
 									iv: e.target.iv,
 								}
 								authApi.decryptPhone(parmas).then(res => {
-									this.phoneNumber="15794119711"
 									// this.phoneNumber="15794119711"
+									this.phoneNumber="16604815974"
+									// this.phoneNumber=res.phone
 									if(res){
 										console.log(res,':ressss')
 										// this.phoneNumber=res.phone
 										// uni.setStorageSync('phoneNumber',res.phone);
-										uni.setStorageSync('phoneNumber','15794119711');
+										uni.setStorageSync('phoneNumber','16604815974');
 										this.getMyLogin()
 									}
 									
@@ -173,9 +170,7 @@
 
 		},
 		getMyLogin(){
-			console.log(this.phoneNumber,"909090909")
 			authApi.myLogin({phone:this.phoneNumber}).then(res => {
-				console.log(res,"resresres111")
 				if(res.code===200 && res.token){
 					console.log(res,"resresres")
 					 uni.setStorageSync('token',res.token);

@@ -71,8 +71,8 @@
 		methods: {
 			// 获取用户角色信息
 			getUserRole() {
-				const userInfo = uni.getStorageSync('userInfo')
-				if (userInfo && userInfo.roleId === 100) {
+				const roleId = uni.getStorageSync('roleId')
+				if (roleId && roleId === 100) {
 					this.hideCreate = true
 				} else {
 					this.hideCreate = false

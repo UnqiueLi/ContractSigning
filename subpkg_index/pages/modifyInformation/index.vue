@@ -39,7 +39,7 @@
                 <view class="form-card" v-if="roleId==100">
                     <view class="upload-item">
                         <view class="upload-title">合同签署</view>
-                        <view class="upload-btn" @click="goSign">
+                        <view class="upload-btn" @click="geTmanuallySign">
                             <view class="custom-upload-btn">签署</view>
                         </view>
                     </view>
@@ -76,7 +76,7 @@
                 <!-- 底部按钮 -->
                 <view class="bottom-actions">
                     <!-- <u-button type="primary" class="submit-btn"  @click="getAddContract()" v-if="roleId==100">提交任务</u-button> -->
-					<u-button type="primary" class="submit-btn"  @click="goSign()" v-if="roleId==101" >签署合同</u-button>
+					<u-button type="primary" class="submit-btn"  @click="geTmanuallySign()" v-if="roleId==101" >签署合同</u-button>
                 </view>
             </view>
         </view>
@@ -91,6 +91,7 @@
 	import settings from '@/common/settings.js';
 import { addUserApi,userApi  } from '../../../api/user';
 import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
+import loginVue from '../../../subpkg_login/pages/login/login.vue';
 	export default {
 		data() {
 			return {
@@ -118,27 +119,31 @@ import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
 					color: '#406DFF',
 					backgroundColor: '#fff'
                 },
-                listData:{},
+                listData:{signName:''},
                 selectedParticipant: null,
 				baseUrl: '',
 				fileUr:'',
-				contractId:''
+				contractId:'',
+				parmasid:''
 			};
 		},
 		onLoad(options) {
 			this.baseUrl = settings.devUrl
 			console.log(options,"bbbbbb")
 			this.fileUrl=uni.getStorageSync("fileUrl");
-            this.UploadcontractId = uni.getStorageSync("UploadcontractId");
+			this.parmasid=uni.setStorageSync("parmasid",options.id);
             let id = ''
             if (options.id) {
                 // uni.setStorageSync('id', options.id)
                 id = options.id 
                 this.getContractInfo(id)
+				
             } else {
 				if(this.roleId=='100'){
 					this.listData = JSON.parse(uni.getStorageSync('listDataPrev'))
 					this.getContractPlaceOnFile()
+				}else if(this.roleId=='101'){
+					this.goBack()
 				}
             }
 		
@@ -154,20 +159,21 @@ import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
             // this.getList()
 		},
     methods: {
-		goSign(){
-		  this.getContractUpload()
+		goBack(){
+		  uni.switchTab({
+		  	url:'/pages/tabbar/index/index'
+		  })
 		},
 		//合同归档
 		async  getContractPlaceOnFile() {
-		   const res = await userApi.contractPlaceOnFile(this.UploadcontractId)
+		   const res = await userApi.contractPlaceOnFile(this.listData.contractId)
 		   if (res.code === '1000') {
 				this.getContractDownload()
 		   }
 		},
 		//合同下载
 		async  getContractDownload() {
-			console.log(this.UploadcontractId,"sthis.UploadcontractId")
-		   const res = await userApi.contractDownload(this.UploadcontractId)
+		   const res = await userApi.contractDownload(this.listData.contractId)
 		   if (res.code === 200) {
 				// this.files.remark=res.result
                console.log(res.result,'res.result')
@@ -181,12 +187,21 @@ import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
 		    if (res.code === 200) {
 				this.listData=res?.data
                 this.listData.merchantName = maskPhone(this.listData.merchantName)
+				this.listData.contractId=res.data.contractId
 				console.log(this.listData,"this.listData")
 		    }
 		 },
 		 async  geTmanuallySign(contractId) {
+			 if(this.listData.signName==undefined ){
+				 uni.showToast({
+				 	title: '请输入签署姓名',
+				 	icon: 'none'
+				 });
+				 return;
+			 }
+			 console.log(this.listData.contractId,"======-----")
 			const parmas={
-				contractId:contractId,
+				contractId: this.listData.contractId,
 				customerId:uni.getStorageSync("contractId"),
 				title:this.listData.title,
 				signKeyword:this.listData.signName,
@@ -205,8 +220,8 @@ import { maskPhone, isOnlineFile } from '../../../utils/commonUtils';
 		 async  getContractUpload() {
 		    const res = await userApi.contractUpload({title:this.listData.remark,url:`${this.baseUrl}${this.listData.url}`})
 		    if (res.code === 200) {
-				uni.setStorageSync("UploadcontractId",res.contractId);
-				this.geTmanuallySign(res.contractId)
+				this.listData.contractId=res.contractId
+				this.geTmanuallySign()
 		    }
 		 },
 		getAddContract() {

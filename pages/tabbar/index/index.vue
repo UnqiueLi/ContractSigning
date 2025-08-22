@@ -73,7 +73,7 @@
 			</view>
 		</view>
 		<view>
-			<u-popup v-model="showPopup" mode="center" border-radius="14" mask-close-able='false'>
+			<u-popup v-model="showPopup" mode="center" border-radius="14" :mask-close-able='false'>
 				<view class="" style="padding: 60rpx 60rpx; text-align: center;">
 					<view style="margin-bottom: 60rpx;font-size: 40rpx;" >请先进行实名认证</view>
 					<u-button type="primary" @click="goAuth">去认证</u-button>

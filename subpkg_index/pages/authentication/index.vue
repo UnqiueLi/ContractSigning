@@ -149,9 +149,6 @@
 					}else if(res.code===1){
 						this.getEditMerchant()
 						this.content="恭喜您实名认证成功"
-						uni.navigateTo({
-							url:'/pages/tabbar/index/index'
-						})
 					}
 					this.showModal=true
 				})
@@ -226,7 +223,9 @@
 					
 			},
 			confirm(){
-				uni.navigateBack();
+				uni.switchTab({
+					url:'/pages/tabbar/index/index'
+				})
 			}
 		},
 		
