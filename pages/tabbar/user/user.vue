@@ -36,7 +36,8 @@
 
 			<!-- 退出登录按钮 -->
 			<view class="logout-btn-wrap">
-				<button class="logout-btn" @click="logout">退出登录</button>
+				<button class="logout-btn" @click="goToLogin" v-if="!isLoggedIn">登录</button>
+				<button class="logout-btn" @click="logout" v-else>退出登录</button>
 			</view>
 		</view>
 

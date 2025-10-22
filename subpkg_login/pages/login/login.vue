@@ -8,7 +8,7 @@
 
 		<!-- 登录按钮 -->
 		<view class="login-btn-box">
-			<button class="login-btn" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">微信一键登录</button>
+			<button class="login-btn" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">手机号快捷登录</button>
 		</view>
 
 		<!-- 协议同意 -->
@@ -152,14 +152,14 @@
 									iv: e.target.iv,
 								}
 								authApi.decryptPhone(parmas).then(res => {
+									// this.phoneNumber="15210699448"
 									// this.phoneNumber="15794119711"
-									this.phoneNumber="16604815974"
-									// this.phoneNumber=res.phone
+									this.phoneNumber=res.phone
 									if(res){
 										console.log(res,':ressss')
 										// this.phoneNumber=res.phone
-										// uni.setStorageSync('phoneNumber',res.phone);
-										uni.setStorageSync('phoneNumber','16604815974');
+										uni.setStorageSync('phoneNumber',res.phone);
+										// uni.setStorageSync('phoneNumber','15210699448');
 										this.getMyLogin()
 									}
 									
@@ -195,6 +195,7 @@
 				uni.setStorageSync('userId',res.user.userId);
 				uni.setStorageSync('roleId',res.user.roles[0].roleId);
 				uni.setStorageSync('sign',res.sign)
+				uni.setStorageSync('contractId',res.user.customerId);
 				setTimeout(() => {
 					uni.reLaunch({
 						url: '/pages/tabbar/index/index'

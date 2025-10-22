@@ -141,9 +141,9 @@ const authApi = {
  */
 const userApi = {
 	register: (data) => safeRequest('/mini/register',data), //轮播图列表
-	contractCount: () => safeRequestGet('/mini/getContractCount'), //首页统计
+	contractCount: (data) => safeRequestGet('/mini/getContractCount',data), //首页统计
 	upload: (data) => safeRequest('/common/upload',data), //附件上传
-	contractList: () => safeRequestGet('/mini/getContractList'), //上传图片
+	contractList: (data) => safeRequestGet('/mini/getContractList/'+ data), //上传图片
 	certificate: (data) => safeRequest('/mini/personalCertificate', data), //实名认证
 	bindRealName: (data) => safeRequest('/mini/bindRealName',data), //绑定实名
 	addContract: (data) => safeRequest('/mini/addContract',data), //创建合同任务
@@ -155,6 +155,7 @@ const userApi = {
 	editContract: (data) => safeRequest('/mini/editContract',data), //修改合同提交
 	saveCustomerId: (data) => safeRequest('/mini/saveCustomerId',data), //保存客户id
 	editMerchant: (phone) => safeRequestGet('/mini/editMerchant/'+ phone), //保存客户认证状态
+	authSignature: (data) => safeRequest('/mini/getAuthSignature', data), //印章授权
 	
 	
 	
@@ -162,7 +163,7 @@ const userApi = {
 
 const addUserApi = {
     add: (data) => safeRequest('/mini/addMerchant', data), // 新增个人、新增企业
-    list: () => safeRequestGet('/mini/getMerchantList'),
+    list: (data) => safeRequest('/mini/getMerchantList', data),
 	merchantRemove: (id) => safeRequestDelete('/mini/merchantRemove/' + id)
 };
 

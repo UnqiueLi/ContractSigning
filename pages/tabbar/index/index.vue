@@ -47,7 +47,9 @@
 				</view>
 			</view>
 		</view>
-
+		<view class="subBox">
+			<u-subsection :list="sublist" :current="subCurrent" @change="sectionChange"></u-subsection>
+		</view>
 		<!-- 最近签署列表 -->
 		<view class="recent-signed">
 			<view class="section-title">最近签署列表</view>
@@ -62,6 +64,9 @@
 							<text class="tag" v-for="(tag, idx) in item.tags" :key="idx">{{tag}}</text>
 						</view>
 						<view class="contract-from">发起方: {{item.merchantName}}</view>
+						<view class="contract-from" style="margin-top: 5px;">
+							创建时间：{{item.createTime}}
+						</view>
 					</view>
 					<view class="contract-action">
 						<button class="view-btn" @click="viewContract(item.id)">去查看</button>
@@ -126,7 +131,22 @@
 				showPopup: false,
 				sign:uni.getStorageSync('sign'),
 				currentTab: 'index',
-				hideCreate: false
+				hideCreate: false,
+				sublist: [
+					{
+						name: '未签署',
+						id:1,
+					}, 
+					{
+						name: '已签署',
+						id:2,
+					}, 
+					{
+						name: '已归档',
+						id:3
+					}
+				],
+				subCurrent: 0
 			}
 		},
 		onLoad() {
@@ -139,6 +159,7 @@
 			this.httpUrl = settings.devUrl
 		},
 		onShow() {
+			this.getUserInfo()
 			// 使用自定义底部导航，不需要隐藏系统tabbar
 		},
 		onPageScroll(e) {
@@ -147,6 +168,19 @@
 			this.checkNavFixed()
 		},
 		methods: {
+			sectionChange(index) {
+				this.subCurrent=index
+				this.getContractList()
+				console.log(index,'index++++++')
+				// if(index==0){
+				// 	this.subCurrent = 1;
+				// }else if(index==1){
+				// 	this.subCurrent = 2;
+				// }else if(index==2){
+				// 	this.subCurrent = 3;
+				// }
+				console.log("this.subCurrent",this.subCurrent)
+			},
 			goAuth(){
 				uni.navigateTo({
 					url:'/subpkg_index/pages/authentication/index'
@@ -199,7 +233,8 @@
 
 			// 获取合同列表
 			getContractList() {
-				userApi.contractList().then(res => {
+			const	signStatus=this.subCurrent === 0 ? '1' : this.subCurrent === 1 ? '2' : '3'
+				userApi.contractList(signStatus).then(res => {
 				  this.contractList = res.data
 				})
 			},
@@ -279,7 +314,9 @@
 		justify-content: space-between;
 		padding-top: 20rpx;
 	}
-
+	.subBox{
+		padding: 40rpx;
+	}
 	.search-box {
 		padding: 20rpx 0;
 	}

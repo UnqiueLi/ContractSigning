@@ -3,6 +3,13 @@
     "^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
   },
   "pages": [
+	{
+	    "path": "pages/tabbar/user/user",
+	    "style": {
+	      "navigationBarTitleText": "我的",
+	      "navigationStyle": "custom"
+	  }
+	},
     {
       "path": "pages/tabbar/index/index",
       "style": {
@@ -10,13 +17,7 @@
         "navigationStyle": "custom"
       }
     },
-    {
-      "path": "pages/tabbar/user/user",
-      "style": {
-        "navigationBarTitleText": "我的",
-        "navigationStyle": "custom"
-      }
-    },
+
 	{
 	  "path": "pages/tabbar/create/create",
 	  "style": {

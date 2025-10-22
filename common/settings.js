@@ -11,8 +11,10 @@ module.exports = {
 	version: '1.0.0',
 	// 开发环境接口Url
 	devUrl: 'https://beijinghoulaoer.com/prod-api',
+	// devUrl: 'http://192.168.3.47:8080',
 	// 线上环境接口Url
 	prodUrl: 'https://beijinghoulaoer.com/prod-api',
+	// prodUrl: 'http://192.168.3.47:8080',
 	// 配后端数据的接收方式application/json;charset=UTF-8或者application/x-www-form-urlencoded;charset=UTF-8
 	contentType: 'application/json;charset=UTF-8',
 	// 后端返回状态码，如code,status

@@ -39,8 +39,11 @@
                 <view class="form-card" v-if="roleId==100">
                     <view class="upload-item">
                         <view class="upload-title">合同签署</view>
-                        <view class="upload-btn" @click="geTmanuallySign">
-                            <view class="custom-upload-btn">签署</view>
+                        <view class="upload-btn" @click="listData.signStatus ==1 ?  '': geTmanuallySign() ">
+                            <view class="custom-upload-btn">
+								<text v-if="listData.signStatus ==1">已签署</text>
+								<text v-else>签署</text>
+							</view>
                         </view>
                     </view>
                 </view>
@@ -76,11 +79,18 @@
                 <!-- 底部按钮 -->
                 <view class="bottom-actions">
                     <!-- <u-button type="primary" class="submit-btn"  @click="getAddContract()" v-if="roleId==100">提交任务</u-button> -->
-					<u-button type="primary" class="submit-btn"  @click="geTmanuallySign()" v-if="roleId==101" >签署合同</u-button>
-                </view>
+					<u-button type="primary" class="submit-btn"  @click="geTmanuallySign()" v-if="roleId==101 || roleId==102" :disabled='listData.bsSignStatus ==1'>
+						<text v-if='listData.bsSignStatus ==1'>已签署</text>
+						<text v-else>签署合同</text>
+					</u-button>
+				</view>
+				<u-button type="primary" class="submit-btn"  @click="getContractPlaceOnFile('1')" v-if="roleId==101 || roleId==102" :disabled='listData.bsSignStatus ==0 || listData.signStatus == 0 || listData.filingStatus==1'>
+					<text v-if="listData.filingStatus==0">归档</text>
+					<text v-else>已归档</text>
+				</u-button>
             </view>
         </view>
-
+		<u-modal v-model="showModal" :content="content" @confirm="confirmFun"></u-modal>
         <!-- 时间选择器 -->
         <u-picker v-model="showPicker" mode="time" :params="timePickerParams" :show-time-tag="true"
             @confirm="onTimeConfirm" @cancel="showPicker = false"></u-picker>
@@ -95,6 +105,8 @@ import loginVue from '../../../subpkg_login/pages/login/login.vue';
 	export default {
 		data() {
 			return {
+				content:'',
+				showModal:false,
 				requireCFCA: false,
 				signMethod: 'manual',
 				formData: {
@@ -119,7 +131,9 @@ import loginVue from '../../../subpkg_login/pages/login/login.vue';
 					color: '#406DFF',
 					backgroundColor: '#fff'
                 },
-                listData:{signName:''},
+                listData:{
+					signName:'',
+				},
                 selectedParticipant: null,
 				baseUrl: '',
 				fileUr:'',
@@ -139,11 +153,14 @@ import loginVue from '../../../subpkg_login/pages/login/login.vue';
                 this.getContractInfo(id)
 				
             } else {
+				console.log(this.roleId,"this.roleId")
 				if(this.roleId=='100'){
 					this.listData = JSON.parse(uni.getStorageSync('listDataPrev'))
-					this.getContractPlaceOnFile()
-				}else if(this.roleId=='101'){
-					this.goBack()
+					this.getAddContract()
+				}else if(this.roleId=='101' || this.roleId==102){
+					this.listData = JSON.parse(uni.getStorageSync('listDataPrev'))
+					this.getAddContract()
+					console.log(this.listData,"====")
 				}
             }
 		
@@ -159,26 +176,29 @@ import loginVue from '../../../subpkg_login/pages/login/login.vue';
             // this.getList()
 		},
     methods: {
+		confirmFun(){
+			uni.switchTab({url:'/pages/tabbar/index/index'});
+		},
 		goBack(){
 		  uni.switchTab({
 		  	url:'/pages/tabbar/index/index'
 		  })
 		},
 		//合同归档
-		async  getContractPlaceOnFile() {
+		async  getContractPlaceOnFile(flag) {
 		   const res = await userApi.contractPlaceOnFile(this.listData.contractId)
 		   if (res.code === '1000') {
-				this.getContractDownload()
+				this.getContractDownload(flag)
 		   }
 		},
 		//合同下载
-		async  getContractDownload() {
+		async  getContractDownload(flag) {
 		   const res = await userApi.contractDownload(this.listData.contractId)
 		   if (res.code === 200) {
 				// this.files.remark=res.result
                console.log(res.result,'res.result')
                this.listData = { ...this.listData, url:res.result }
-			   this.getAddContract()
+			   this.getAddContract(flag)
                console.log(this.listData,'this.listData ')
 		   }
 		},
@@ -188,7 +208,19 @@ import loginVue from '../../../subpkg_login/pages/login/login.vue';
 				this.listData=res?.data
                 this.listData.merchantName = maskPhone(this.listData.merchantName)
 				this.listData.contractId=res.data.contractId
+				this.listData.signName= this.roleId==101 || this.roleId==102 ? '盖章处' : '签字处'
 				console.log(this.listData,"this.listData")
+		    }
+		 },
+		 //盖章授权
+		 async  getAuthSignature() {
+		    const res = await userApi.authSignature({
+				contractId:'test15456457',
+				customerId:uni.getStorageSync("contractId"),
+				returnUrl:'',
+			})
+		    if (res.code === 200) {
+		 	
 		    }
 		 },
 		 async  geTmanuallySign(contractId) {
@@ -206,6 +238,10 @@ import loginVue from '../../../subpkg_login/pages/login/login.vue';
 				title:this.listData.title,
 				signKeyword:this.listData.signName,
 				returnUrl:'/subpkg_index/pages/modifyInformation/index',
+				// signatureId:this.roleId=='101' ? '1757244431062427' : '',
+				mobileSignType:this.roleId=='100' ? '2' : '',
+				writingTrack:this.roleId=='100' ? '1' : '',
+				
 			}
 		    const res = await userApi.manuallySign(parmas)
 		    if (res.code === 200) {
@@ -224,29 +260,49 @@ import loginVue from '../../../subpkg_login/pages/login/login.vue';
 				this.geTmanuallySign()
 		    }
 		 },
-		getAddContract() {
+		getAddContract(flag) {
+			const {contractId, createTime,  merchantName, signName, url,title,id } = this.listData;
+			console.log("url1111",url)
 			const parmas={
-                ...this.listData,
-				// title:this.listData.title,
-                // contractId: this.listData.url,
+				contractId:contractId,
 				merchantId:this.listData.initiator,
 				status:'1',
+				title:title,
+				url:url,
 				participantsBy:this.listData.participantsBy,
 				// deadline:this.listData.deadline,
 				selectedParticipant: this.listData.participantsByName,
-				// id:'',
+				id:id,
+				filingStatus:flag == '1' ? 1 : null
+			}
+			console.log(this.roleId,"this.roleId")
+			if(this.roleId===100){
+				if(flag!==1){
+					parmas.signStatus = 1;
+				}
+			}else{
+				if(flag!==1){
+					parmas.bsSignStatus = 1;
+				}
 			}
 			userApi.editContract(parmas).then(res => {
 				if (res.code === 200) {
-					
-					uni.showToast({
-						title: '合同签署成功',
-						icon: 'success'
-					});
+					if(this.roleId=='101' || this.roleId=='102'){
+						uni.showToast({
+							title: '合同签署成功',
+							icon: 'success'
+						});
+						setTimeout(()=>{
+							this.goBack()
+						},1500)
+					}else{
+						this.content='合同签署成功'
+						this.showModal=true
+					}
                     // 可以在这里跳转到任务列表页面
-                    setTimeout(() => {
-                        uni.switchTab({url:'/pages/tabbar/index/index'});
-                    }, 1500);
+                    // setTimeout(() => {
+                    //     uni.switchTab({url:'/pages/tabbar/index/index'});
+                    // }, 1500);
 				} else {
 					uni.showToast({
 						title: res.msg || '创建失败',
@@ -671,11 +727,12 @@ import loginVue from '../../../subpkg_login/pages/login/login.vue';
 	}
 	
 	.bottom-actions {
-		margin-top: 40rpx;
+		margin: 40rpx 0;
 	}
 	
 	.submit-btn {
 		width: 100%;
+		// margin-bottom: 40rpx;
 	}
 	
 

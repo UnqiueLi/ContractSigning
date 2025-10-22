@@ -33,7 +33,6 @@
                         </view>
                     </view>
                 </view>
-
                 <!-- 文档上传 -->
                 <view class="form-card">
                     <view class="upload-item">
@@ -44,6 +43,9 @@
                         </view>
                     </view>
                 </view>
+				<view class="searchBox">
+					<u-search placeholder="请输入参与方" v-model="searchVal" @custom='searchFun'></u-search>
+				</view>
                 <view class="form-card filesBox" v-if="files.length>0">
                     <view class="fileNameBox" v-for="(item, index) in files" :key="index">
                         <text>{{item.fileName}}</text>
@@ -76,9 +78,9 @@
                                     <text class="participant-type">{{ item.type === 1 ? '企业' : '个人' }}</text>
                                 </view>
                             </view>
-                            <view class="participant-actions" @click.stop="delFun(item.id)">
+                         <!--   <view class="participant-actions" @click.stop="delFun(item.id)">
                                 <u-icon name="trash" size="22" color="#6c757d" class="delete-icon"></u-icon>
-                            </view>
+                            </view> -->
                         </view>
                             </view>
                     </view>
@@ -117,6 +119,7 @@ import { maskPhone } from '../../../utils/commonUtils';
 	export default {
 		data() {
 			return {
+				searchVal:'',
 				requireCFCA: false,
 				signMethod: 'manual',
 				formData: {
@@ -179,14 +182,17 @@ import { maskPhone } from '../../../utils/commonUtils';
 				this.hideCreate = false
 			}
 		},
-		
+		searchFun(){
+			this.getList()
+		},
 		// goSign(){
 		//   this.getContractUpload()
 		// },
         // 参与方列表
 
          async  getList() {
-            const res = await addUserApi.list({})
+			 const search=this.searchVal 
+            const res = await addUserApi.list({search:search})
             if (res.code === 200) {
                 console.log(res)
                 this.listData=res?.data
@@ -480,7 +486,15 @@ import { maskPhone } from '../../../utils/commonUtils';
 	page {
 		background-color: #f5f6f9;
 	}
-	
+	.searchBox{
+		background: #fff;
+		margin-bottom: 20rpx;
+		border-radius: 12rpx;
+		padding: 20rpx 32rpx;
+	}
+	 :v-deep .u-search{
+		padding: 0;
+	}
 	.page-container {
 		padding-top: calc(var(--status-bar-height) + 120rpx); /* 为顶部导航栏留出空间 */
 		padding-bottom: 188rpx; /* 为自定义底部导航留出空间 */

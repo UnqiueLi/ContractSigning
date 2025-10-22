@@ -95,7 +95,7 @@
 
 <script>
 	import {
-		userApi
+		userApi,authApi
 	} from '../../../api/user.js';
 	import { Base64 } from 'js-base64'
 	export default {
@@ -147,10 +147,16 @@
 						this.content=res.msg
 						uni.removeStorageSync("verifiedSerialNo")
 					}else if(res.code===1){
+						this.getMyInfo()
 						this.getEditMerchant()
 						this.content="恭喜您实名认证成功"
 					}
 					this.showModal=true
+				})
+			},
+			getMyInfo(){
+				authApi.myInfo().then(res => {
+					uni.setStorageSync('contractId',res.user.customerId);
 				})
 			},
 			getSaveCustomerId(customerId){
@@ -181,9 +187,12 @@
 					if(res.code===1){
 						 console.log( Base64.decode(res.data.url),"sssss66644")
 						 const baseUrl=Base64.decode(res.data.url)
+						 const pathAndParams = baseUrl.split("realnameverify.fadada.com/")[1];
+						 const newBaseUrl="https://realnameverify12.fadada.com/" + pathAndParams
+						 console.log(newBaseUrl,"newBaseUrlnewBaseUrl")
 						 uni.setStorageSync("verifiedSerialNo",res.data.transactionNo);
 						 uni.navigateTo({
-						   url: '/subpkg_index/pages/webview/index?url=' + encodeURIComponent(baseUrl)
+						   url: '/subpkg_index/pages/webview/index?url=' + encodeURIComponent(newBaseUrl)
 						 });
 						// userApi.bindRealName({customerId:code,verifiedSerialNo:res.data.transactionNo}).then(res => {
 						// 	if(res.code===3205){
